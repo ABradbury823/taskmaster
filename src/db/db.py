@@ -20,14 +20,13 @@ class Database():
   def __init__(self, schema_name: str):
     self._conn = None
     self._schema = None
-    self.open()
-    self.set_schema(schema_name)
+    self.open(schema_name)
 
-  def open(self):
+  def open(self, schema:str=None):
     """Start a new psycopg2 connection if not running"""
     if self._conn is None or self._conn.closed != 0:
       self._conn = self.connect()
-      self.set_schema()
+      self.set_schema(schema)
     else: raise Exception('Connection is already open')
 
   def set_schema(self, schema:str=None):
