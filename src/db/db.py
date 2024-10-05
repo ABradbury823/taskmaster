@@ -6,6 +6,7 @@ class Database():
   @staticmethod
   def connect():
     """Connect to the database with data from ~/config/db.yml"""
+    # credit swen610_db_utils
     config = {}
     yml_path = path.join(path.dirname(__file__), '../../config/db.yml')
     with open(yml_path, 'r') as file:
