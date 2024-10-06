@@ -136,6 +136,7 @@ class TestDatabase(unittest.TestCase):
       self.db._conn.rollback()
 
   def test_exec_commit(self):
+    """Able to commit changes to db"""
     table_name = 'test_exec_commit'
     with self.db._conn.cursor() as cursor:
       cursor.execute("""
@@ -144,11 +145,12 @@ class TestDatabase(unittest.TestCase):
           number INT
         )
       """.format(table_name))
+    not_returned = ['sample', 1]
     result1 = self.db.exec_commit("""
       INSERT INTO {}
       VALUES (%s, %s);
     """.format(table_name),
-    ['sample', 1])
+    not_returned)
     self.assertEqual(result1, None,
                      """Expected result to 
                      return None on insert""")
@@ -162,3 +164,10 @@ class TestDatabase(unittest.TestCase):
     self.assertEqual(result2, tuple(returned),
                      """Expected result to 
                      return input on insert""")
+    self.db.close()
+    self.db.open()
+    with self.db._conn.cursor() as c:
+      c.execute("SELECT * FROM {};".format(table_name))
+      self.assertEqual(c.fetchall(), 
+                       [tuple(not_returned), tuple(returned)],
+                       'Expected changes to be commited')

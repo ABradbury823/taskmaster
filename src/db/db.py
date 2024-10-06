@@ -27,13 +27,14 @@ class Database():
     """Start a new psycopg2 connection if not running"""
     if self._conn is None or self._conn.closed != 0:
       self._conn = self.connect()
-      self.set_schema(schema)
+      self.set_schema(schema or self._schema)
     else: raise Exception('Connection is already open')
 
   def set_schema(self, schema:str=None):
     """Set the Postgres `search_path` to a schema"""
-    if schema is None: return # what should happen here?
-    self._schema = schema
+    if schema is not None:
+      self._schema = schema
+    if self._schema is None: return
     with self._conn.cursor() as c:
       c.execute('CREATE SCHEMA IF NOT EXISTS %s;' 
                 % self._schema)
