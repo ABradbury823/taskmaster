@@ -79,3 +79,24 @@ class Database():
                           + ' is not a positive integer.')
     self._conn.rollback()
     return result
+  
+  def exec_commit(self, query: str, args={}):
+    """
+    Execute a query, commit to the databse 
+    and return the result. On exceptions,
+    rollback transaction and raise error.
+    """
+    result = None
+    with self._conn.cursor() as c:
+      # TODO: what to do when query throws
+      # error, raise or continue
+      try:
+        c.execute(query, args)
+        result = c.fetchall()
+      except (Exception) as err:
+        if err.args [0] != 'no results to fetch':
+          self._conn.rollback()
+          raise err
+    self._conn.commit()
+    return (result if result is None or len(result) != 1 
+            else result[0])

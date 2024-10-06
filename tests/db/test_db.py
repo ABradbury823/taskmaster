@@ -134,3 +134,31 @@ class TestDatabase(unittest.TestCase):
                        '-1 is not a positive integer.',
                        'Expected error on bad number')
       self.db._conn.rollback()
+
+  def test_exec_commit(self):
+    table_name = 'test_exec_commit'
+    with self.db._conn.cursor() as cursor:
+      cursor.execute("""
+        CREATE TABLE {}(
+          test VARCHAR,
+          number INT
+        )
+      """.format(table_name))
+    result1 = self.db.exec_commit("""
+      INSERT INTO {}
+      VALUES (%s, %s);
+    """.format(table_name),
+    ['sample', 1])
+    self.assertEqual(result1, None,
+                     """Expected result to 
+                     return None on insert""")
+    returned = ['example', 2]
+    result2 = self.db.exec_commit("""
+      INSERT INTO {}
+      VALUES (%s, %s)
+      RETURNING *;
+    """.format(table_name),
+    returned)
+    self.assertEqual(result2, tuple(returned),
+                     """Expected result to 
+                     return input on insert""")
