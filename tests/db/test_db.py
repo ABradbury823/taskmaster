@@ -75,3 +75,62 @@ class TestDatabase(unittest.TestCase):
       self.db._conn.rollback() 
     self.assertEqual(result, [('sample', 1)], 
                      'Expected table entity to be returned')
+
+  def test_select(self):
+    "able to retrieve entities from database"
+    with self.db._conn.cursor() as cursor:
+      cursor.execute(f"""
+                     CREATE TABLE test_select(
+                       id INT UNIQUE,
+                       string VARCHAR
+                     );
+                     """)
+      many_num = 23
+      many_arr = []
+      evens = []
+      evens_many = []
+      all = []
+      for i in range(100):
+        pair = (i + 1, 'test'+str(i + 1))
+        if i < many_num:
+          many_arr.append(pair)
+        if (i + 1) % 2 == 0:
+          evens.append(pair)
+          if len(evens_many) < many_num:
+            evens_many.append(pair)
+        all.append(pair)
+        cursor.execute("""
+          INSERT INTO test_select
+          VALUES (%s, %s);
+        """, pair)
+      self.db._conn.commit()
+      base_query = "SELECT * FROM test_select{};"
+      select_query = base_query.format('')
+      self.assertEqual(self.db.select(select_query, number=1),
+                       (1, 'test1'), 
+                       'Expected to retrieve first row')
+      self.assertEqual(
+        self.db.select(select_query, number=many_num),
+        many_arr, 
+        f'Expected to retrieve {many_num} entries'
+      )
+      self.assertEqual(self.db.select(select_query),
+                       all, 'Expected to all entries')
+      # need to % to escape replacement sequence
+      evens_query = base_query.format(' WHERE (id %% 2) = 0')
+      self.assertEqual(self.db.select(evens_query, number=1),
+                       evens[0], 
+                       'Expected to retrieve first row of evens')
+      self.assertEqual(
+        self.db.select(evens_query, number=many_num),
+        evens_many, 
+        f'Expected to retrieve {many_num} entries of evens'
+      )
+      self.assertEqual(self.db.select(evens_query),
+                       evens, 'Expected to all even entries')
+      with self.assertRaises(ValueError) as bad_num:
+        self.db.select(select_query, number=-1)
+      self.assertEqual(bad_num.exception.args[0],
+                       '-1 is not a positive integer.',
+                       'Expected error on bad number')
+      self.db._conn.rollback()

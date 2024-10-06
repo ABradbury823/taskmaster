@@ -8,7 +8,8 @@ class Database():
     """Connect to the database with data from ~/config/db.yml"""
     # credit swen610_db_utils
     config = {}
-    yml_path = path.join(path.dirname(__file__), '../../config/db.yml')
+    yml_path = path.join(path.dirname(__file__), 
+                         '../../config/db.yml')
     with open(yml_path, 'r') as file:
       config = yaml.load(file, Loader=yaml.FullLoader)
     return psycopg2.connect(dbname=config['database'],
@@ -34,7 +35,8 @@ class Database():
     if schema is None: return # what should happen here?
     self._schema = schema
     with self._conn.cursor() as c:
-      c.execute('CREATE SCHEMA IF NOT EXISTS %s;' % self._schema)
+      c.execute('CREATE SCHEMA IF NOT EXISTS %s;' 
+                % self._schema)
       c.execute('SET search_path TO {},public;'
                 .format(self._schema))
     self._conn.commit()
@@ -50,8 +52,31 @@ class Database():
     # start from root dir, credit swen610_db_utils.py
     abs_path = path.join(path.dirname(__file__), 
                          f'../../{file}') 
+    # TODO: should closed connects raise exception
+    # or just work automatically?
     if self._conn.closed != 0: self.open()
     with self._conn.cursor() as cursor:
       with open(abs_path, 'r') as file:
         cursor.execute(file.read())
     self._conn.commit()
+
+  def select(self, query:str, args={}, number: int=None):
+    """
+    Retrieve results of query from database. 
+    Does *not* commit.
+    """
+    result = None
+    with self._conn.cursor() as cursor:
+      cursor.execute(query, args)
+      match number:
+        case None:
+          result = cursor.fetchall()
+        case 1:
+          result = cursor.fetchone()
+        case s if s > 1:
+          result = cursor.fetchmany(number)
+        case _:
+          raise ValueError(str(number) 
+                           + ' is not a positive integer.')
+    self._conn.rollback()
+    return result
