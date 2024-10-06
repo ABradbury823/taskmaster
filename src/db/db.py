@@ -68,15 +68,14 @@ class Database():
     result = None
     with self._conn.cursor() as cursor:
       cursor.execute(query, args)
-      match number:
-        case None:
-          result = cursor.fetchall()
-        case 1:
-          result = cursor.fetchone()
-        case s if s > 1:
-          result = cursor.fetchmany(number)
-        case _:
-          raise ValueError(str(number) 
-                           + ' is not a positive integer.')
+      if number is None:
+        result = cursor.fetchall()
+      elif number == 1:
+        result = cursor.fetchone()
+      elif number > 1:
+        result = cursor.fetchmany(number)
+      else:
+        raise ValueError(str(number) 
+                          + ' is not a positive integer.')
     self._conn.rollback()
     return result
