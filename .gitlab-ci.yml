@@ -5,7 +5,7 @@ services:
   - postgres:14
 
 variables:
-  POSTGRES_DB: swen610
+  POSTGRES_DB: taskmaster
   POSTGRES_USER: swen610
   POSTGRES_PASSWORD: whowatchesthewatchmen
   PYTHON_RUN: python3
