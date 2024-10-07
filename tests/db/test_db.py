@@ -9,13 +9,7 @@ class TestDatabase(unittest.TestCase):
     self.db = Database(test_schema)
 
   def tearDown(self):
-    if self.db._conn is None or self.db._conn.closed != 0:
-      self.db.open()
-    with self.db._conn.cursor() as cursor:
-      cursor.execute('DROP SCHEMA IF EXISTS {} CASCADE;'
-                      .format(test_schema))
-    self.db._conn.commit()
-    self.db._conn.close()
+    self.db.cleanup(drop_schema=True)
 
   def test_init(self):
     """Initializing db opens connection"""

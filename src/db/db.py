@@ -23,6 +23,21 @@ class Database():
     self._schema = None
     self.open(schema_name)
 
+  def cleanup(self, drop_schema=False):
+    """
+    Close the database connection, drop
+    the current schema if specified
+    """
+    if drop_schema and self._schema is not None:
+      if self._conn.closed != 0:
+        self.open()
+      with self._conn.cursor() as cursor:
+        cursor.execute('DROP SCHEMA IF EXISTS {} CASCADE;'
+                        .format(self._schema))
+      self._conn.commit()
+    if self._conn and self._conn.closed == 0:
+      self.close()
+
   def open(self, schema:str=None):
     """Start a new psycopg2 connection if not running"""
     if self._conn is None or self._conn.closed != 0:
