@@ -11,7 +11,7 @@ variables:
   PYTHON_RUN: python3
 
 before_script:
-  - pip install -r requirements.txt
+  - pip install -qr requirements.txt
   - cp config/gitlab-credentials.yml config/db.yml
   - $PYTHON_RUN --version
   - $PYTHON_RUN src/server.py & # & - run command in new process
@@ -20,6 +20,7 @@ before_script:
 
 testrunner:
   script:
-    - $PYTHON_RUN -m unittest -v
+    - $PYTHON_RUN -m coverage run -m unittest -v
+    - $PYTHON_RUN -m coverage report
   
   stage: test
