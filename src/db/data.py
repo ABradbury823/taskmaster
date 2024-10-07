@@ -2,7 +2,7 @@ from .swen610_db_utils import exec_get_one
 
 def does_data_exist(schema_name: str):
   """
-  Checks that the test data exists.
+  Checks that a database schema exists.
 
   Parameters:
     schema_name (str) - Name of the schema.
@@ -15,10 +15,12 @@ def does_data_exist(schema_name: str):
   #  https://www.postgresql.org/docs/current/infoschema-tables.html
   query = """
   SELECT * FROM information_schema.tables
-  WHERE table_schema = 'test';
+  WHERE table_schema = %s;
   """
 
-  result = exec_get_one(query)
+  params = (schema_name,)
+
+  result = exec_get_one(query, params)
 
   # if there is no schema, the result will be None
   return result != None
