@@ -9,5 +9,5 @@ class TestCreateTestData(unittest.TestCase):
 
   def test_data_exists(self):
     """test data exists after being created in setUp"""
-    result = does_data_exist("test")
-    self.assertTrue(result, "Expected to find data, but none was found.")
+    result = does_data_exist('test')
+    self.assertTrue(result, 'Expected to find data, but none was found.')
