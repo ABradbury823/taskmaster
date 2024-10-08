@@ -28,6 +28,9 @@ def update_task(task_id: int, args={}):
       columns.append(f'{col}=%s')
       values.append(args[col])
 
+  if len(values) == 0:
+    return None
+
   values.append(task_id)
 
   query = f"""
