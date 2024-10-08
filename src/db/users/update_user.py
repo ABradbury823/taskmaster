@@ -10,6 +10,7 @@ def _build_update_user_query(user_id: int, args: dict[str, str]):
 
   Returns:
     query_values (tuple) - The formatted query string and the list of value parameters.
+    Returns None if all of the key/value arguments are invalid.
   """
 
   user_cols = [
@@ -24,6 +25,10 @@ def _build_update_user_query(user_id: int, args: dict[str, str]):
       params.append(args[col])
 
   params.append(user_id)
+
+  # account for no valid args
+  #TODO: refactor update functions to account for None
+  if(columns.count == 0): return None
   
   # QUESTION: do we really want/need to update more than one column at once?
   query = f"""
@@ -55,6 +60,7 @@ def update_user(user_id: int, args: dict[str, str]):
   result = exec_commit_return(query, params)
   return result
 
+#TODO: make sure new account name is unique
 def update_user_name(user_id: int, new_name: str):
   """
   Updates the user's account name.
@@ -68,11 +74,12 @@ def update_user_name(user_id: int, new_name: str):
     (id, name, email, password, display_name, bio).
   """
 
-  query, params = _build_update_user_query(user_id, {'name', new_name})
+  query, params = _build_update_user_query(user_id, {'name': new_name})
 
   result = exec_commit_return(query, params)
   return result
 
+#TODO: make sure new email is unique
 def update_user_email(user_id: int, new_email: str):
   """
   Updates the user's account name.
@@ -86,11 +93,12 @@ def update_user_email(user_id: int, new_email: str):
     (id, name, email, password, display_name, bio).
   """
 
-  query, params = _build_update_user_query(user_id, {'email', new_email})
+  query, params = _build_update_user_query(user_id, {'email': new_email})
 
   result = exec_commit_return(query, params)
   return result
 
+#TODO: hash new password
 def update_user_password(user_id: int, new_password: str):
   """
   Updates the user's account password.
@@ -104,7 +112,7 @@ def update_user_password(user_id: int, new_password: str):
     (id, name, email, password, display_name, bio).
   """
 
-  query, params = _build_update_user_query(user_id, {'password', new_password})
+  query, params = _build_update_user_query(user_id, {'password': new_password})
 
   result = exec_commit_return(query, params)
   return result
@@ -123,7 +131,7 @@ def update_user_display_name(user_id: int, new_display_name: str):
     (id, name, email, password, display_name, bio).
   """
 
-  query, params = _build_update_user_query(user_id, {'display_name', new_display_name})
+  query, params = _build_update_user_query(user_id, {'display_name': new_display_name})
 
   result = exec_commit_return(query, params)
   return result
@@ -141,7 +149,7 @@ def update_user_bio(user_id: int, new_bio: str):
     (id, name, email, password, display_name, bio).
   """
 
-  query, params = _build_update_user_query(user_id, {'bio', new_bio})
+  query, params = _build_update_user_query(user_id, {'bio': new_bio})
 
   result = exec_commit_return(query, params)
   return result
