@@ -1,4 +1,8 @@
-from .swen610_db_utils import exec_get_one
+from .swen610_db_utils import exec_get_one, exec_sql_file
+
+def create_test_data():
+  """Builds a test database from a SQL file."""
+  exec_sql_file('src/db/create_test_data.sql')
 
 def does_data_exist(schema_name: str):
   """

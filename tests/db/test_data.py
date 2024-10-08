@@ -2,9 +2,9 @@ import unittest
 from src.db.data import *
 from src.db.swen610_db_utils import *
 
-class TestCreateTestData(unittest.TestCase):
+class TestData(unittest.TestCase):
   def setUp(self):
-    exec_sql_file('src/db/create_test_data.sql')
+    create_test_data()
 
 
   def test_data_exists(self):
