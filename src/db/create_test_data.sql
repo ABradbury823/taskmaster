@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS test.teams (
 CREATE TABLE IF NOT EXISTS test.team_members (
 	id SERIAL PRIMARY KEY,
 	team_id INTEGER NOT NULL REFERENCES test.teams(id),
-	user_id INTEGER NOT NULL REFERENCES test.users(id),
+	user_id INTEGER NOT NULL REFERENCES test.users(id) ON DELETE CASCADE,
 	joined_on DATE NOT NULL DEFAULT '-infinity',
 	is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS test.taskboards (
 CREATE TABLE IF NOT EXISTS test.tasks (
 	id SERIAL PRIMARY KEY,
 	taskboard_id INTEGER NOT NULL REFERENCES test.taskboards(id),
-	assignee_id INTEGER REFERENCES test.users(id),
+	assignee_id INTEGER REFERENCES test.users(id) ON DELETE SET NULL,
 	name TEXT NOT NULL,
 	description TEXT NOT NULL DEFAULT '',
 	due_date TIMESTAMP

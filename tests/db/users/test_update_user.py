@@ -2,7 +2,7 @@ import unittest
 from src.db.data import create_test_data
 from src.db.swen610_db_utils import *
 from src.db.users.update_user import *
-from src.db.users.get_users import get_user
+from src.db.users.get_user import get_user
 
 class TestUpdateUser(unittest.TestCase):
   def setUp(self):

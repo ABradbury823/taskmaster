@@ -1,7 +1,7 @@
 import unittest
 from src.db.data import create_test_data
 from src.db.swen610_db_utils import *
-from src.db.users.get_users import *
+from src.db.users.get_user import *
 
 class TestGetUser(unittest.TestCase):
   def setUp(self):
@@ -19,7 +19,7 @@ class TestGetUser(unittest.TestCase):
     user = exec_get_one('SELECT * FROM test.users WHERE id = %s', (1,))
     self.assertEqual(result, user, "Expected information with the id 1.")
 
-  def test_get_self(self):
+  def test_get_invalid_user(self):
     """Returns None if the user id does not match a user"""
     result = get_user(-10)
     self.assertIsNone(result, "Expected output of None when getting user with the id -10.")
