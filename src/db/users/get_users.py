@@ -9,7 +9,7 @@ def get_all_users():
     (user_id, account_name, email, password, display_name, bio)
   """
 
-  query = 'SELECT * FROM tests.users;'
+  query = 'SELECT * FROM test.users;'
 
   result = exec_get_all(query)
   return result
@@ -26,7 +26,7 @@ def get_user(user_id: int):
     (user_id, account_name, email, password, display_name, bio)
   """
 
-  query = 'SELECT * FROM tests.users WHERE id = %s;'
+  query = 'SELECT * FROM test.users WHERE id = %s;'
 
   params = (user_id,)
 
