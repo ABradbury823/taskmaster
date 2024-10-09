@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS test.categories (
 -- make task categories table, a join table between tasks and categories
 CREATE TABLE IF NOT EXISTS test.task_categories (
 	id SERIAL PRIMARY KEY,
-	task_id INTEGER NOT NULL REFERENCES test.tasks(id),
+	task_id INTEGER NOT NULL REFERENCES test.tasks(id) ON DELETE CASCADE,
 	category_id INTEGER NOT NULL REFERENCES test.categories(id)
 );
 
