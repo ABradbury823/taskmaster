@@ -26,3 +26,7 @@ class TestDeleteUser(unittest.TestCase):
     # user 2 (Adam) was assigned to task 1
     task = exec_get_one('SELECT * FROM test.tasks WHERE id = %s', (1,))
     self.assertIsNone(task[2], 'Expected task assignee to be null after user deletion.')
+
+  # TODO: test what should happen when the deleted user is the last/only admin of a team
+
+  # TODO: test what should happen when the last user of a team is deleted
