@@ -12,3 +12,14 @@ class TestGetUser(unittest.TestCase):
     result = get_all_users()
     userCount = exec_get_one('SELECT COUNT(id) from test.users;')[0]
     self.assertEqual(len(result), userCount, "Expected a list of users equal in length to users table.")
+
+  def test_get_user(self):
+    """Gets a specific user at a valid id"""
+    result = get_user(1)
+    user = exec_get_one('SELECT * FROM test.users WHERE id = %s', (1,))
+    self.assertEqual(result, user, "Expected information with the id 1.")
+
+  def test_get_self(self):
+    """Returns None if the user id does not match a user"""
+    result = get_user(-10)
+    self.assertIsNone(result, "Expected output of None when getting user with the id -10.")
