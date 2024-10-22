@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS test.team_members CASCADE;
 DROP TABLE IF EXISTS test.teams CASCADE;
 DROP TABLE IF EXISTS test.users CASCADE;
 DROP SCHEMA IF EXISTS test CASCADE;
---COMMIT;
+
 -- create schema and intialize parameters
 CREATE SCHEMA IF NOT EXISTS test;
 
@@ -50,7 +50,6 @@ CREATE TABLE IF NOT EXISTS test.taskboards (
 	team_id INTEGER NOT NULL REFERENCES test.teams(id),
 	name TEXT NOT NULL
 );
-
 
 -- make tasks table
 CREATE TABLE IF NOT EXISTS test.tasks (
