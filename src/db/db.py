@@ -21,6 +21,7 @@ class Database():
   def __init__(self, schema_name: str):
     self._conn = None
     self._schema = None
+    self._tables = None
     self.open(schema_name)
 
   def cleanup(self, drop_schema=False):
@@ -56,6 +57,30 @@ class Database():
       c.execute('SET search_path TO {},public;'
                 .format(self._schema))
     self._conn.commit()
+    self.fetch_tables()
+
+  def fetch_tables(self):
+    with self._conn.cursor() as c:
+      c.execute("""
+        SELECT 
+          JSON_BUILD_OBJECT(
+            'table_name', table_name, 
+            'columns', ARRAY_AGG(JSON_BUILD_OBJECT(
+              'column_name', column_name, 
+              'type', data_type, 
+              'default', column_default, 
+              'nullable', is_nullable
+            ))
+          )
+        FROM information_schema.columns
+        WHERE table_schema = %s
+        GROUP BY table_name;
+      """, (self._schema,)
+      )
+      self._tables = tuple(t[0] for t in c.fetchall())
+
+  def get_tables(self):
+    return self._tables
 
   def close(self):
     """Close existing psycopg2 connection"""
