@@ -22,7 +22,7 @@ class TestTasks(unittest.TestCase):
       'assignee_id': 2,
       'name': 'Find a reason',
       'description': 'Why are we here? Just to suffer?',
-      'due_date': datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
+      'due_date': datetime.now().strftime("%d/%m/%Y,%H:%M:%S")
     }
     res = test_post(self, base_url + endpoint, json=task, expected_status=200)
     for key in task:
