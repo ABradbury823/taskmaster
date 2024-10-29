@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from datetime import datetime
 
 from db.tasks.create_task import create_task
+from db.tasks.get_task import get_all_tasks
 
 def task_tuple_to_object(task: tuple):
   return {
@@ -14,6 +15,9 @@ def task_tuple_to_object(task: tuple):
   }
 
 class Tasks(Resource):
+  def get(self):
+    return list((task_tuple_to_object(task) for task in get_all_tasks()))
+
   def post(self):
     task_parser = reqparse.RequestParser(bundle_errors=True)
     task_parser.add_argument(

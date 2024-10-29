@@ -11,9 +11,10 @@ class TestTasks(unittest.TestCase):
   def setUp(self):
     exec_sql_file('src/db/create_test_data.sql')
 
-  def test_get_returns_405_error(self):
+  def test_get_returns_all_tasks(self):
     """Get requests are not allowed at tasks endpoint"""
-    test_get(self, base_url + endpoint, expected_status=405)
+    results = test_get(self, base_url + endpoint)
+    self.assertEqual(5, len(results))
 
   def test_post_creates_task(self):
     """Post requests return newly-created tasks"""
