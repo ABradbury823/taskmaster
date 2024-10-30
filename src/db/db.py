@@ -70,7 +70,7 @@ class Database():
               'column_name', column_name, 
               'type', data_type, 
               'default', column_default, 
-              'nullable', is_nullable
+              'nullable', is_nullable != 'NO'
             ))
             FROM information_schema.columns
             WHERE table_name = c1.table_name)
