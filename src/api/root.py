@@ -5,4 +5,4 @@ db = Database('test')
 
 class Root(Resource):
   def get(self):
-    return db.tables
+    return 'Hello world!'

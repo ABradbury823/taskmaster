@@ -56,8 +56,8 @@ class Database():
                 % self._schema)
       c.execute('SET search_path TO {},public;'
                 .format(self._schema))
-    self._conn.commit()
     self.fetch_tables()
+    self._conn.commit()
 
   def fetch_tables(self):
     with self._conn.cursor() as c:
