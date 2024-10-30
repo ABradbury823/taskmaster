@@ -81,7 +81,8 @@ class Database():
       )
       self._tables = c.fetchone()[0]
 
-  def get_tables(self):
+  @property
+  def tables(self):
     return self._tables
 
   def close(self):
