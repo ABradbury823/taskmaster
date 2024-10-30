@@ -8,11 +8,18 @@ class Table():
     self._columns = columns
     self._database = database
 
-  def select(self, fields={}, where={}):
+  def select(self, fields:list=[], where={}):
+    filtered_fields = []
+    
     for column in self._columns:
-      print(column['column_name'], column['type'], column['nullable'])
+      if column['column_name'] in fields:
+        filtered_fields.append(column['column_name'])
+
     query = f"""
-      SELECT *
+      SELECT {
+        '*' if len(filtered_fields) == 0
+        else ', '.join(filtered_fields)
+      }
       FROM {self._name};
     """
     return self._database.select(query)

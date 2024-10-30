@@ -84,8 +84,9 @@ class Database():
       """, (self._schema,)
       )
       tables = c.fetchone()[0]
-      for name in tables:
-        tables[name] = Table(name, tables[name], self)
+      if tables is not None:
+        for name in tables:
+          tables[name] = Table(name, tables[name], self)
       self._tables = tables
     self._conn.rollback()
 
