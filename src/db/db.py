@@ -62,22 +62,24 @@ class Database():
   def fetch_tables(self):
     with self._conn.cursor() as c:
       c.execute("""
-        SELECT 
-          JSON_BUILD_OBJECT(
-            'table_name', table_name, 
-            'columns', ARRAY_AGG(JSON_BUILD_OBJECT(
+        SELECT
+          JSON_OBJECT_AGG(
+            c1.table_name, 
+            (SELECT ARRAY_AGG(JSON_BUILD_OBJECT(
+              'ordinal_position', ordinal_position,
               'column_name', column_name, 
               'type', data_type, 
               'default', column_default, 
               'nullable', is_nullable
             ))
+            FROM information_schema.columns
+            WHERE table_name = c1.table_name)
           )
-        FROM information_schema.columns
-        WHERE table_schema = %s
-        GROUP BY table_name;
+        FROM information_schema.columns c1
+        WHERE table_schema = %s;
       """, (self._schema,)
       )
-      self._tables = tuple(t[0] for t in c.fetchall())
+      self._tables = c.fetchone()[0]
 
   def get_tables(self):
     return self._tables
