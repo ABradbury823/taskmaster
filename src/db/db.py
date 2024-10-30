@@ -60,20 +60,23 @@ class Database():
     self._conn.commit()
 
   def fetch_tables(self):
+    """Retrieve tables and columns from database"""
     with self._conn.cursor() as c:
       c.execute("""
         SELECT
           JSON_OBJECT_AGG(
             c1.table_name, 
-            (SELECT ARRAY_AGG(JSON_BUILD_OBJECT(
-              'ordinal_position', ordinal_position,
-              'column_name', column_name, 
-              'type', data_type, 
-              'default', column_default, 
-              'nullable', is_nullable != 'NO'
-            ))
+            (SELECT 
+              ARRAY_AGG(JSON_BUILD_OBJECT(
+                'ordinal_position', ordinal_position,
+                'column_name', column_name, 
+                'type', data_type, 
+                'default', column_default, 
+                'nullable', is_nullable != 'NO'
+              ))
             FROM information_schema.columns
-            WHERE table_name = c1.table_name)
+            WHERE table_name = c1.table_name
+            )
           )
         FROM information_schema.columns c1
         WHERE table_schema = %s;
