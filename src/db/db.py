@@ -56,8 +56,8 @@ class Database():
                 % self._schema)
       c.execute('SET search_path TO {},public;'
                 .format(self._schema))
-    self.fetch_tables()
     self._conn.commit()
+    self.fetch_tables()
 
   def fetch_tables(self):
     """Retrieve tables and columns from database"""
@@ -83,6 +83,7 @@ class Database():
       """, (self._schema,)
       )
       self._tables = c.fetchone()[0]
+    self._conn.rollback()
 
   @property
   def tables(self):
