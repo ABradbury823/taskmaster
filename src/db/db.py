@@ -1,6 +1,7 @@
 import psycopg2
 import yaml
 import os.path as path
+from .table import Table
 
 class Database():
   @staticmethod
@@ -82,7 +83,10 @@ class Database():
         WHERE table_schema = %s;
       """, (self._schema,)
       )
-      self._tables = c.fetchone()[0]
+      tables = c.fetchone()[0]
+      for name in tables:
+        tables[name] = Table(name, tables[name], self)
+      self._tables = tables
     self._conn.rollback()
 
   @property
