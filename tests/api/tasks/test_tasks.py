@@ -1,7 +1,7 @@
 import unittest
 
 from ..test_req_utils import test_get, test_post, test_put, test_delete
-from src.db.swen610_db_utils import exec_sql_file
+from src.db.swen610_db_utils import exec_sql_file, exec_get_one
 from datetime import datetime
 
 base_url = 'http://localhost:4500'
@@ -36,9 +36,13 @@ class TestTasks(unittest.TestCase):
     """Put requests are not allowed at root endpoint"""
     test_put(self, base_url + endpoint, expected_status=405)
 
-  def test_delete_returns_405_error(self):
-    """Delete requests are not allowed at root endpoint"""
-    test_delete(self, base_url + endpoint, expected_status=405)
+  def test_delete_returns_deleted_from_id(self):
+    """Delete requests return deleted item(s)"""
+    id = 1
+    deleted = list(exec_get_one("SELECT * FROM test.tasks WHERE id=%s;", [id]))
+    deleted[5] =  deleted[5].strftime("%d/%m/%Y,%H:%M:%S") # due date
+    res = test_delete(self, base_url + endpoint + '?id={}'.format(id))
+    self.assertEqual(deleted, list(res.values()))
 
 if __name__ == '__main__':
   unittest.main()
