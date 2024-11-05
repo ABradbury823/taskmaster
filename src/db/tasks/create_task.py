@@ -1,4 +1,4 @@
-from src.db.swen610_db_utils import exec_commit_return
+from ..swen610_db_utils import exec_commit_return
 
 def create_task(taskboard_id:int, args:dict={}):
   """
@@ -17,7 +17,7 @@ def create_task(taskboard_id:int, args:dict={}):
     )`
   """
   col_heads = [ 
-    'assigne_id', 'name', 'description', 'due_date' 
+    'assignee_id', 'name', 'description', 'due_date' 
   ]
 
   columns = [ 'taskboard_id' ]
