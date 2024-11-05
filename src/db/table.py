@@ -20,7 +20,7 @@ class Table():
       arr.append(self.parse_obj(entity))
     return arr
 
-  def select(self, fields:list=[], where:dict={}):
+  def select(self, fields:list=[], where:dict={}, number:int=None):
     filtered_fields = []
     filtered_where = []
     values = []
@@ -44,7 +44,8 @@ class Table():
         else 'WHERE ' + ' AND '.join(filtered_where)
        };
     """
-    res = self._database.select(query, values)
+    res = self._database.select(query, values, number)
+    if res is None: return None
     return (
       self.parse_obj(res) if type(res) is tuple 
         else self.parse_array_of_ojbs(res)

@@ -1,11 +1,15 @@
 import unittest
 
 from ..test_req_utils import test_get, test_post, test_put, test_delete
+from src.db.swen610_db_utils import exec_sql_file
 
 base_url = 'http://localhost:4500'
 endpoint = '/taskboards'
 
 class TestTaskboards(unittest.TestCase):
+  def setUp(self):
+    exec_sql_file('src/db/create_test_data.sql')
+  
   def test_get_returns_all_taskboards(self):
     """taskboards endpoint should return all taskboards"""
     taskboards = test_get(self, base_url + endpoint)
