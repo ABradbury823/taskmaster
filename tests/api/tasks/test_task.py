@@ -30,9 +30,40 @@ class TestTask(unittest.TestCase):
     """Post requests are not allowed at specific task endpoint"""
     test_post(self, base_url + endpoint + '/1', expected_status=405)
 
-  def test_put_returns_405_error(self):
-    """Put requests are not allowed at root endpoint"""
-    test_put(self, base_url + endpoint + '/1', expected_status=405)
+  def test_put_returns_updated_task(self):
+    """Put requests return the updated object"""
+    id = 1
+    updated = list(exec_get_one("SELECT * FROM test.tasks WHERE id=%s;", [id]))
+    updated[3] = 'new name'
+    updated[4] = 'new description'
+    updated_obj = {
+      'id': updated[0],
+      'taskboard_id': updated[1],
+      'assignee_id': updated[2],
+      'name': updated[3],
+      'description': updated[4],
+      'due_date': updated[5].strftime("%d/%m/%Y,%H:%M:%S"),
+    }
+    res = test_put(self, base_url + endpoint + '/{}'.format(id), json=updated_obj)
+    self.assertEqual(updated_obj, res)
+
+  def test_put_is_updated_in_database(self):
+    """Put requests overwrite the object in the database"""
+    id = 1
+    updated = list(exec_get_one("SELECT * FROM test.tasks WHERE id=%s;", [id]))
+    updated[3] = 'new name'
+    updated[4] = 'new description'
+    updated_obj = {
+      'id': updated[0],
+      'taskboard_id': updated[1],
+      'assignee_id': updated[2],
+      'name': updated[3],
+      'description': updated[4],
+      'due_date': updated[5].strftime("%d/%m/%Y,%H:%M:%S"),
+    }
+    test_put(self, base_url + endpoint + '/{}'.format(id), json=updated_obj)
+    db_task = exec_get_one("SELECT * FROM test.tasks WHERE id=%s;", [id])
+    self.assertEqual(updated, list(db_task))
 
   def test_delete_returns_deleted_from_id(self):
     """Delete requests return deleted task"""
