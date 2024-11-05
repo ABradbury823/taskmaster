@@ -12,7 +12,7 @@ class TestTasks(unittest.TestCase):
     exec_sql_file('src/db/create_test_data.sql')
 
   def test_get_returns_all_tasks(self):
-    """Get requests are retrieve all tasks in database"""
+    """Get requests retrieve all tasks in database"""
     results = test_get(self, base_url + endpoint)
     self.assertEqual(5, len(results))
 
