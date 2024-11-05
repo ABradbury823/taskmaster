@@ -8,6 +8,18 @@ class Table():
     self._columns = columns
     self._database = database
 
+  def parse_obj(self, entity: tuple):
+    obj = {}
+    for col in self._columns:
+      obj[col['column_name']] = entity[(col['ordinal_position'] - 1)]
+    return obj
+  
+  def parse_array_of_ojbs(self, entities: list):
+    arr = []
+    for entity in entities:
+      arr.append(self.parse_obj(entity))
+    return arr
+
   def select(self, fields:list=[], where:dict={}):
     filtered_fields = []
     filtered_where = []
@@ -32,7 +44,11 @@ class Table():
         else 'WHERE ' + ' AND '.join(filtered_where)
        };
     """
-    return self._database.select(query, values)
+    res = self._database.select(query, values)
+    return (
+      self.parse_obj(res) if type(res) is tuple 
+        else self.parse_array_of_ojbs(res)
+    )
   
   def insert(self, fields:dict={}, returning:list=''):
     filtered_fields = []
