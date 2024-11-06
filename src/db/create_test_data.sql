@@ -5,9 +5,10 @@ DROP TABLE IF EXISTS test.tasks CASCADE;
 DROP TABLE IF EXISTS test.taskboards CASCADE;
 DROP TABLE IF EXISTS test.team_members CASCADE;
 DROP TABLE IF EXISTS test.teams CASCADE;
+DROP TABLE IF EXISTS test.sessions CASCADE;
 DROP TABLE IF EXISTS test.users CASCADE;
 DROP SCHEMA IF EXISTS test CASCADE;
---COMMIT;
+
 -- create schema and intialize parameters
 CREATE SCHEMA IF NOT EXISTS test;
 
@@ -28,6 +29,16 @@ CREATE TABLE IF NOT EXISTS test.users (
 	bio TEXT NOT NULL DEFAULT ''
 );
 
+-- make sessions table, for user authentication
+CREATE TABLE IF NOT EXISTS test.sessions (
+	id TEXT PRIMARY KEY,
+	user_id INTEGER NOT NULL REFERENCES test.users(id) ON DELETE CASCADE,
+	session_key TEXT NOT NULL,
+	created_at TIMESTAMP DEFAULT 'now',
+	expires_at TIMESTAMP,
+	CONSTRAINT session_expiry CHECK (expires_at > created_at)
+);
+
 -- make teams table
 CREATE TABLE IF NOT EXISTS test.teams (
 	id SERIAL PRIMARY KEY,
@@ -38,7 +49,7 @@ CREATE TABLE IF NOT EXISTS test.teams (
 -- make team members table, a join table between users and teams
 CREATE TABLE IF NOT EXISTS test.team_members (
 	id SERIAL PRIMARY KEY,
-	team_id INTEGER NOT NULL REFERENCES test.teams(id),
+	team_id INTEGER NOT NULL REFERENCES test.teams(id) ON DELETE CASCADE,
 	user_id INTEGER NOT NULL REFERENCES test.users(id) ON DELETE CASCADE,
 	joined_on DATE NOT NULL DEFAULT '-infinity',
 	is_admin BOOLEAN NOT NULL DEFAULT FALSE
@@ -47,15 +58,14 @@ CREATE TABLE IF NOT EXISTS test.team_members (
 -- make taskboards table
 CREATE TABLE IF NOT EXISTS test.taskboards (
 	id SERIAL PRIMARY KEY,
-	team_id INTEGER NOT NULL REFERENCES test.teams(id),
+	team_id INTEGER NOT NULL REFERENCES test.teams(id) ON DELETE CASCADE,
 	name TEXT NOT NULL
 );
-
 
 -- make tasks table
 CREATE TABLE IF NOT EXISTS test.tasks (
 	id SERIAL PRIMARY KEY,
-	taskboard_id INTEGER NOT NULL REFERENCES test.taskboards(id),
+	taskboard_id INTEGER NOT NULL REFERENCES test.taskboards(id) ON DELETE CASCADE,
 	assignee_id INTEGER REFERENCES test.users(id) ON DELETE SET NULL,
 	name TEXT NOT NULL,
 	description TEXT NOT NULL DEFAULT '',
@@ -65,7 +75,7 @@ CREATE TABLE IF NOT EXISTS test.tasks (
 -- make categories table
 CREATE TABLE IF NOT EXISTS test.categories (
 	id SERIAL PRIMARY KEY,
-	taskboard_id INTEGER NOT NULL REFERENCES test.taskboards(id),
+	taskboard_id INTEGER NOT NULL REFERENCES test.taskboards(id) ON DELETE CASCADE,
 	name TEXT NOT NULL
 );
 

@@ -1,4 +1,4 @@
-from src.db.swen610_db_utils import *
+from ..swen610_db_utils import *
 
 def delete_user(user_id: int):
   """
@@ -18,3 +18,4 @@ def delete_user(user_id: int):
   
   result = exec_commit_return(query, params)
   return result
+
