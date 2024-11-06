@@ -3,6 +3,7 @@ from datetime import datetime
 
 from db.tasks.create_task import create_task
 from db.tasks.get_task import get_all_tasks
+from db.tasks.delete_task import delete_task
 
 def task_tuple_to_object(task: tuple):
   return {
@@ -46,3 +47,36 @@ class Tasks(Resource):
     args = task_parser.parse_args(strict=True)
     new_task = create_task(args.get('taskboard_id'), args)
     return task_tuple_to_object(new_task)
+  
+  def delete(self):
+    task_parser = reqparse.RequestParser(bundle_errors=True)
+    task_parser.add_argument(
+      'id', type=int, action='append',
+      location='args', help="id of the task"
+    )
+    # TODO: Implement other behavior for deletion
+    # task_parser.add_argument(
+    #   'taskboard_id', type=int, action='append',
+    #   location='args', help="id of the taskboard"
+    # )
+    # task_parser.add_argument(
+    #   'name', type=str, action='append',
+    #   location='args', help="name of the task"
+    # )
+    # task_parser.add_argument(
+    #   'assignee_id', type=int, action='append',
+    #   location='args', help='user_id of assignee'
+    # )
+    # task_parser.add_argument(
+    #   'description', type=str, action='append',
+    #   location='args', help='task description'
+    # )
+    # task_parser.add_argument(
+    #   'due_date', type=lambda x: datetime.strptime(
+    #     x,
+    #     "%d/%m/%Y,%H:%M:%S"
+    #   ), action='append',
+    #   location='args', help='When the required item is due'
+    # )
+    args = task_parser.parse_args()
+    return task_tuple_to_object(delete_task(args['id'][0]))

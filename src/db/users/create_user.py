@@ -1,4 +1,7 @@
-from src.db.swen610_db_utils import *
+from ..swen610_db_utils import *
+from ..sessions.session_utils import hash_string
+
+from .get_user import is_user_name_used, is_user_email_used
 
 def create_user(name: str, email: str, password: str, display_name:str = '', bio: str = ''):
   """
@@ -17,8 +20,19 @@ def create_user(name: str, email: str, password: str, display_name:str = '', bio
     (user_id, user_name, email, password, display_name, bio)
   """
 
-  #TODO: Check if user name/email are already in use, hash password.
+  # Should we just be checking for UniqueViolation exceptions instead of querying the
+  # database two more times?
+  if(is_user_name_used(name)):
+    # TODO: raise exception
+    #print("Duplicate user name in create_user")
+    return None
+  if(is_user_email_used(email)):
+    # TODO: raise exception
+    #print("Duplicate email in create_user")
+    return None
 
+  password = hash_string(password)
+  
   # if the display name is empty, set it to the username
   if(display_name == '' or display_name is None): display_name = name
 

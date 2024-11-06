@@ -2,7 +2,6 @@ import unittest
 from src.db.data import create_test_data
 from src.db.swen610_db_utils import *
 from src.db.users.update_user import *
-from src.db.users.get_user import get_user
 
 class TestUpdateUser(unittest.TestCase):
   def setUp(self):
@@ -87,7 +86,23 @@ class TestUpdateUser(unittest.TestCase):
     user = self.get_user(user_id)
     self.assertEqual(len(result), len(user), "Expected same number of columns when invalid fields are provided.")
 
-  #TODO: test edge case where all update_user args are invalid (should return None)
+  def test_update_all_fields_invalid(self):
+    """Updating full set of invalid arguments returns None"""
+    result = update_user(1, {'coolness': 'yeah', 'awesomeness': 'hell yeah', 'super_password': 'ultrapassword'})
+    self.assertIsNone(result, "Expected None when updating a set of invalid user fields.")
+
+  def test_update_duplicate_name(self):
+    """User is not updated if username is already used"""
+    result = update_user_name(1, 'adam')
+    self.assertIsNone(result, "Expected no result when updating a user with a duplicate name")
+
+  def test_update_duplicate_email(self):
+    """User is not updated if email is already used"""
+    result = update_user_email(1, 'adam@email.com')
+    self.assertIsNone(result, "Expected no result when updating a user with a duplicate email")
 
 
+
+
+  
 
