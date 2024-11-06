@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 class Table():
   def __init__(
     self, name: str, columns: list, 
@@ -12,6 +14,10 @@ class Table():
     obj = {}
     for col in self._columns:
       obj[col['column_name']] = entity[(col['ordinal_position'] - 1)]
+      # TODO: verify types form col['type']
+      col_type = type(obj[col['column_name']])
+      if col_type is date:
+        obj[col['column_name']] = obj[col['column_name']].strftime("%d/%m/%Y,%H:%M:%S")
     return obj
   
   def parse_array_of_ojbs(self, entities: list):
