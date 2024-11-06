@@ -1,4 +1,5 @@
-from src.db.swen610_db_utils import *
+from ..swen610_db_utils import *
+from .get_user import is_user_name_used, is_user_email_used
 
 def _build_update_user_query(user_id: int, args: dict[str, str]):
   """
@@ -11,6 +12,7 @@ def _build_update_user_query(user_id: int, args: dict[str, str]):
   Returns:
     query_values (tuple) - The formatted query string and the list of value parameters.
     Returns None if all of the key/value arguments are invalid.
+    Returns None if the name or email are already in use.
   """
 
   user_cols = [
@@ -27,10 +29,20 @@ def _build_update_user_query(user_id: int, args: dict[str, str]):
   params.append(user_id)
 
   # account for no valid args
-  #TODO: refactor update functions to account for None
-  if(columns.count == 0): return None
+  if(len(columns) == 0): return None
   
-  # QUESTION: do we really want/need to update more than one column at once?
+  # check that new account name is unique
+  if('name' in args and is_user_name_used(args['name'])):
+    # TODO: raise exception
+    #print("Duplicate user name in update_user_name")
+    return None
+  
+  # make sure new email is unique
+  if('email' in args and is_user_email_used(args['email'])):
+    # TODO: raise exception
+    #print("Duplicate email in update_user")
+    return None
+
   query = f"""
   UPDATE test.users 
   SET {', '.join(columns)}
@@ -54,13 +66,17 @@ def update_user(user_id: int, args: dict[str, str]):
     user_info (tuple) - The updated user's information in the format
     (id, name, email, password, display_name, bio).
   """
+  build_result = _build_update_user_query(user_id, args)
 
-  query, params = _build_update_user_query(user_id, args)
+  if build_result is None:
+    # should throw exception
+    return None
+
+  query, params = build_result
 
   result = exec_commit_return(query, params)
   return result
 
-#TODO: make sure new account name is unique
 def update_user_name(user_id: int, new_name: str):
   """
   Updates the user's account name.
@@ -73,13 +89,17 @@ def update_user_name(user_id: int, new_name: str):
     user_info (tuple) - The updated user's information in the format
     (id, name, email, password, display_name, bio).
   """
+  build_result = _build_update_user_query(user_id, {'name': new_name})
 
-  query, params = _build_update_user_query(user_id, {'name': new_name})
+  if build_result is None:
+    # should throw exception
+    return None
+
+  query, params = build_result
 
   result = exec_commit_return(query, params)
   return result
 
-#TODO: make sure new email is unique
 def update_user_email(user_id: int, new_email: str):
   """
   Updates the user's account name.
@@ -93,7 +113,13 @@ def update_user_email(user_id: int, new_email: str):
     (id, name, email, password, display_name, bio).
   """
 
-  query, params = _build_update_user_query(user_id, {'email': new_email})
+  build_result = _build_update_user_query(user_id, {'email': new_email})
+
+  if build_result is None:
+    # should throw exception
+    return None
+
+  query, params = build_result
 
   result = exec_commit_return(query, params)
   return result
