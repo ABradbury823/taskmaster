@@ -1,9 +1,10 @@
 import { Button, Card, CardHeader, Form, FormGroup, FormText, Input, Label } from 'reactstrap'
 
+// TODO: move styles to css
 export default function LoginForm() {
   return (
     <Card style={{"border": "1px solid #ddd"}}>
-      <CardHeader tag="h4" className="text-center p-3">TaskMaster Login</CardHeader>
+      <CardHeader tag="h4" className="text-center p-3">Login to TaskMaster</CardHeader>
       <Form className='m-4'>
         <FormGroup floating>
           <Input
