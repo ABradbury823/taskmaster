@@ -1,10 +1,11 @@
 import { Button, Card, CardHeader, Form, FormGroup, FormText, Input, Label } from 'reactstrap'
+import "./LoginForm.css"
 
 // TODO: move styles to css
 export default function LoginForm() {
   return (
-    <Card style={{"border": "1px solid #ddd"}}>
-      <CardHeader tag="h4" className="text-center p-3">Login to TaskMaster</CardHeader>
+    <Card>
+      <CardHeader tag="h2">TaskMaster Login</CardHeader>
       <Form className='m-4'>
         <FormGroup floating>
           <Input
@@ -31,19 +32,17 @@ export default function LoginForm() {
         <FormGroup className="py-3">
           <Button 
             block 
-            type="submit" 
-            color="success"
-            style={{"borderRadius": "2rem"}}
+            type="submit"
             >
               Sign In
           </Button>
         </FormGroup>
-        <FormGroup className="text-center">
+        <FormGroup>
           <FormText tag="span">
             New user?
           </FormText>
           {" "}
-          <FormText tag="a">
+          <FormText className="sign-up" tabIndex={0}>
             Sign up
           </FormText>
         </FormGroup>
