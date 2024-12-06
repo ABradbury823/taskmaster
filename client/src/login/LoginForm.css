@@ -19,21 +19,24 @@
 .btn {
   padding: .75rem;
   border-radius: .5rem;
-  background-color: #25A18E;
-  border-color: #25A18E;
-  color: white;
   font-weight: bold;
 }
 
-.btn:hover {
+.btn[type="submit"] {
+  background-color: #25A18E;
+  border-color: #25A18E;
+  color: white;
+  
+}
+
+.btn[type="submit"]:hover {
   background-color: #239483;
   border-color: #208c7c;
 }
 
-.btn:focus {
+.btn[type="submit"]:focus {
   background-color: #239483;
   border: .25rem #307f73cc solid;
-  box-shadow: none;
 }
 
 .btn:active {
