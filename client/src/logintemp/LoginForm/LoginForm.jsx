@@ -1,6 +1,6 @@
 import { Button, Card, CardHeader, Form, FormGroup, FormText, Input, Label } from 'reactstrap'
 import "./LoginForm.css"
-import NewUserForm from "./NewUserForm";
+import NewUserForm from "../NewUserForm/NewUserForm";
 import { useState } from "react";
 
 export default function LoginForm() {

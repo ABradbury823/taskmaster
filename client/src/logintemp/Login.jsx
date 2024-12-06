@@ -1,5 +1,5 @@
 import { Col, Container, Row } from "reactstrap";
-import LoginForm from "./LoginForm";
+import LoginForm from "./LoginForm/LoginForm";
 import './Login.css'
 
 export default function Login() {
