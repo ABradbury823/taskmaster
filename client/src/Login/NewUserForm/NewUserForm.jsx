@@ -93,6 +93,7 @@ export default function NewUserForm({open, onSubmit, onToggle}) {
     ) {
       setInvalidSubmit(true);
       setSubmitMessage("Please fix the invalid field(s)")
+      return;
     }
 
     // TODO: check that username and email are available

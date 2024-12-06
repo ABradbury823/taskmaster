@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
-import Login from './login/Login';
+import Login from './Login/Login';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import Taskboard from './Taskboard/Taskboard';
