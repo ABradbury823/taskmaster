@@ -3,7 +3,7 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 export default function NewUserForm({open, onSubmit, onToggle}) {
   return (
-    <Modal isOpen={open} toggle={onToggle}> 
+    <Modal isOpen={open} toggle={onToggle} centered> 
       <ModalHeader toggle={onToggle}>New User Register</ModalHeader>
       <ModalBody>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. 
