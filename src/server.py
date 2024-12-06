@@ -1,5 +1,6 @@
 from flask import *
 from flask_restful import Api
+from flask_cors import CORS
 
 from api.root import Root
 from api.users import Users, User
@@ -12,6 +13,7 @@ from api.categories import Categories
 from api.teams import Teams
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 api.add_resource(Login, '/login')
