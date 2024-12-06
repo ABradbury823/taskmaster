@@ -1,0 +1,17 @@
+import { Col, Container, Row } from "reactstrap";
+import LoginForm from "./LoginForm/LoginForm";
+import './Login.css'
+
+export default function Login() {
+  return (
+    <Container>
+      <Row>
+        <Col xs="1" sm="2" md="3" xxl="4"></Col>
+        <Col xs="10" sm="8" md="6" xxl="4">
+          <LoginForm/>
+        </Col>
+        <Col xs="1" sm="2" md="3" xxl="4"></Col>
+      </Row>
+    </Container>
+  );  
+}

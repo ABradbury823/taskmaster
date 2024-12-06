@@ -13,10 +13,27 @@ from the project's root directory
 ```
 python src/server.py
 ```
+To install React dependencies use the following command
+from the project's `/client` directory
+```
+npm install
+```
+Start the React application with the following command
+from the project's `/client` directory
+```
+npm start
+```
 
 ## Usage
 Once the server is running, the taskmaster database can be
-access through the Flask-RESTful application server.
+accessed through the Flask-RESTful application server.
+
+Once the React web application is running in a browser,
+navigate to the following sub-directories to access current progress.
+```
+http://localhost:3000/login
+http://localhost:3000/taskboard
+```
 
 ## Support
 Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.

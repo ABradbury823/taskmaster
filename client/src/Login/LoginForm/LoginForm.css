@@ -1,0 +1,71 @@
+.card {
+  border: 1px solid #ccc;
+  border-radius: .5rem;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 2px 2px 2px 2px #3333;
+}
+
+.card-header {
+  padding: 2rem 0;
+  background-color: white;
+  border: none;
+  border-radius: .5rem !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #111;
+  text-shadow: 1px 1px lightgrey;
+}
+
+.btn {
+  padding: .75rem;
+  border-radius: .5rem;
+  font-weight: bold;
+}
+
+.btn[type="submit"] {
+  background-color: #25A18E;
+  border-color: #25A18E;
+  color: white;
+  
+}
+
+.btn[type="submit"]:hover {
+  background-color: #239483;
+  border-color: #208c7c;
+}
+
+.btn[type="submit"]:focus {
+  background-color: #239483;
+  border: .25rem #307f73cc solid;
+}
+
+.btn:active {
+  background-color: #1d7c6e !important;
+  border-color: #186c5f !important;
+}
+
+.sign-up {
+  color: #00A5CF !important;
+  cursor: pointer;
+}
+
+.sign-up:hover {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.sign-up:focus {
+  outline: none;
+  border: 2px #00A5CF solid;
+  padding: .15rem;
+  border-radius: .5rem;
+}
+
+.sign-up:active {
+  font-weight: bold;
+  color: #0383a3 !important;
+}
+
+.card-header, .form-text {
+  user-select: none;
+}
