@@ -1,10 +1,10 @@
-import { Card, CardTitle, CardBody, Row, Col, Container } from "reactstrap";
+import { Card, CardTitle, CardBody, Row, Col } from "reactstrap";
 
 export default function TaskCard ({ task }) {
   const { name, description, due_date, assignee_id } = task;
   return (
     <Col xs={{ size: 10, offset: 1}} sm={{ size: 3, offset: 0}}>
-      <Card style={{ maxWidth: '18rem', minWidth: 'fit-content' }} >
+      <Card className="m-2">
         <CardTitle style={{ 
           padding: '0.5rem',
           borderBottom: '0.05rem solid black'
