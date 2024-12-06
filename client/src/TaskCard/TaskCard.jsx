@@ -29,7 +29,7 @@ export default function TaskCard ({ task }) {
         <CardBody className="p-4 pt-0">
           <div className="d-flex flex-column flex-sm-row justify-content-between">
             <div style={{ width: 'fit-content', textAlign: "left" }}>{user?.display_name ?? 'Unassigned'}</div>
-            <div style={{ width: 'fit-content', textAlign: "right" }}>Due: {due_date ? new Date().toDateString() : '-'}</div>
+            <div style={{ width: 'fit-content', textAlign: "right" }}>Due: {due_date ? new Date(due_date).toDateString() : '-'}</div>
           </div>
           <Row style={{ textAlign: "left"}}>
             <Col xs="12">
