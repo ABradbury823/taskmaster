@@ -1,8 +1,15 @@
 import { Button, Card, CardHeader, Form, FormGroup, FormText, Input, Label } from 'reactstrap'
 import "./LoginForm.css"
+import NewUserForm from "./NewUserForm";
+import { useState } from "react";
 
-// TODO: move styles to css
 export default function LoginForm() {
+  const [newUserModal, setNewUserModal] = useState(false);
+
+  function toggleNewUserModal() {
+    setNewUserModal(!newUserModal);
+  }
+
   return (
     <Card>
       <CardHeader tag="h2">TaskMaster Login</CardHeader>
@@ -42,9 +49,14 @@ export default function LoginForm() {
             New user?
           </FormText>
           {" "}
-          <FormText className="sign-up" tabIndex={0}>
+          <FormText className="sign-up" tabIndex={0} onClick={toggleNewUserModal}>
             Sign up
           </FormText>
+          <NewUserForm
+            open={newUserModal}
+            onSubmit={() => {console.log("Create new user"); toggleNewUserModal();}}
+            onToggle={toggleNewUserModal}
+          />
         </FormGroup>
       </Form>
     </Card>

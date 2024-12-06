@@ -13,6 +13,5 @@ export default function Login() {
         <Col xs="1" sm="2" md="3" xxl="4"></Col>
       </Row>
     </Container>
-    // </div>
   );  
 }
