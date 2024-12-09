@@ -2,9 +2,11 @@ import { Button, Card, CardHeader, Form, FormGroup, FormText, Input, Label } fro
 import "./LoginForm.css"
 import NewUserForm from "../NewUserForm/NewUserForm";
 import { useState } from "react";
+import { useOutletContext } from 'react-router';
 
 export default function LoginForm() {
   const [newUserModal, setNewUserModal] = useState(false);
+  const { setUser } = useOutletContext();
 
   function toggleNewUserModal() {
     setNewUserModal(!newUserModal);
@@ -13,7 +15,12 @@ export default function LoginForm() {
   return (
     <Card>
       <CardHeader tag="h2">TaskMaster Login</CardHeader>
-      <Form className='m-4'>
+      <Form onSubmit={(e) => {
+        // TODO: Verify in data and set user context
+        e.preventDefault();
+        const data = new FormData(e.target);
+        setUser(data.get('username'));
+      }} className='m-4'>
         <FormGroup floating>
           <Input
             id="username"

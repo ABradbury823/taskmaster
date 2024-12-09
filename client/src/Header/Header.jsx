@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from '../Context';
+import { Link } from 'react-router';
 import {
   Collapse,
   Navbar,
@@ -12,6 +14,7 @@ import {
 
 function Header({headerRef, ...args}) {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useContext(AuthContext);
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -23,15 +26,21 @@ function Header({headerRef, ...args}) {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
             <NavItem>
-              <NavLink href="/login">Login</NavLink>
+              <Link to="/login">
+                <NavLink>Login</NavLink>
+              </Link>
             </NavItem>
+            {user &&
             <NavItem>
-              <NavLink href="/taskboard">
-                Taskboard
-              </NavLink>
+              <Link to="/taskboard">
+                <NavLink>
+                  Taskboard
+                </NavLink>
+              </Link>
             </NavItem>
+            }
           </Nav>
-          <NavbarText>Simple Text</NavbarText>
+          <NavbarText>{user ? `Welcome, ${user}` : 'Login'}</NavbarText>
         </Collapse>
       </Navbar>
     </header>

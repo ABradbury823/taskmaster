@@ -3,9 +3,13 @@
 import { useState, useEffect, useRef } from 'react';
 import Header from '../Header/Header';
 import { Outlet } from 'react-router';
+import { AuthContext } from '../Context';
 
 function MainLayout() {
   const [headerOffset, setHeaderOffset] = useState('0px');
+  const [user, setUser] = useState(null);
+  console.log(user)
+
   const headerRef = useRef(null);
   useEffect(_ => {
     setHeaderOffset(headerRef.current.clientHeight);
@@ -13,9 +17,11 @@ function MainLayout() {
 
   return (
     <>
-      <Header headerRef={headerRef} expand='lg' color='light' />
+      <AuthContext.Provider value={user}>
+        <Header headerRef={headerRef} expand='lg' color='light' />
+      </AuthContext.Provider>
       <main style={{ marginTop: headerOffset }}>
-        <Outlet />
+        <Outlet context={{ user, setUser }} />
       </main>
     </>
   );
