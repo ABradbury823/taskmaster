@@ -16,7 +16,7 @@ function Header({headerRef, ...args}) {
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <header style={{position: 'fixed', width: '100%', top: '0'}} ref={headerRef}>
+    <header style={{position: 'fixed', width: '100%', top: '0', zIndex: '1'}} ref={headerRef}>
       <Navbar {...args}>
         <NavbarBrand href="/">TaskMaster</NavbarBrand>
         <NavbarToggler onClick={toggle} />
