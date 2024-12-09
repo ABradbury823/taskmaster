@@ -10,13 +10,13 @@ import {
   NavbarText,
 } from 'reactstrap';
 
-function Header(args) {
+function Header({headerRef, ...args}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <header>
+    <header style={{position: 'fixed', width: '100%', top: '0'}} ref={headerRef}>
       <Navbar {...args}>
         <NavbarBrand href="/">TaskMaster</NavbarBrand>
         <NavbarToggler onClick={toggle} />
