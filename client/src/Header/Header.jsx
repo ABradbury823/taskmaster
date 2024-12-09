@@ -27,15 +27,15 @@ function Header({headerRef, ...args}) {
           <Nav className="me-auto" navbar>
             <NavItem>
               <Link to="/login">
-                <NavLink>Login</NavLink>
+                <div>Login</div>
               </Link>
             </NavItem>
             {user &&
             <NavItem>
               <Link to="/taskboard">
-                <NavLink>
+                <div>
                   Taskboard
-                </NavLink>
+                </div>
               </Link>
             </NavItem>
             }

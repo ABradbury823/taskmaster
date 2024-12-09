@@ -16,10 +16,26 @@ export default function LoginForm() {
     <Card>
       <CardHeader tag="h2">TaskMaster Login</CardHeader>
       <Form onSubmit={(e) => {
-        // TODO: Verify in data and set user context
         e.preventDefault();
         const data = new FormData(e.target);
-        setUser(data.get('username'));
+        fetch('http://localhost:4500/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: data.get('username'),
+            password: data.get('password')
+          })
+        }).then(res => res.json())
+        .then(resData => {
+          console.log(resData)
+          if (resData.session_id) {
+            // TODO: store session id in cookies
+            setUser(data.get('username'))
+          } else {
+            console.log(resData.message)
+          }
+        })
+        .catch(err => console.error(err))
       }} className='m-4'>
         <FormGroup floating>
           <Input
@@ -61,7 +77,32 @@ export default function LoginForm() {
           </FormText>
           <NewUserForm
             open={newUserModal}
-            onSubmit={() => {console.log("Create new user"); toggleNewUserModal();}}
+            onSubmit={(e) => {
+              console.log("Create new user"); 
+              e.preventDefault();
+              const data = new FormData(e.target.parentElement.parentElement.children[1].children[0]);
+              const body = {
+                name: data.get('new-username'),
+                password: data.get('new-password'),
+                email: data.get('new-email'),
+                display_name: data.get('new-display_name'),
+                bio: data.get('new-bio'),
+              };
+              fetch('http://localhost:4500/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+              }).then(res => res.json())
+              .then(resData => {
+                if (resData?.name === body.name) {
+                  alert('Success')
+                } else {
+                  alert('Failed')
+                }
+              })
+              .catch(err => console.error(err))
+              toggleNewUserModal();
+            }}
             onToggle={toggleNewUserModal}
           />
         </FormGroup>
