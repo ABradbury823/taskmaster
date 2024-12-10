@@ -1,16 +1,14 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '../Context';
-import { Link } from 'react-router';
 import {
   Collapse,
   Navbar,
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
-  NavLink,
   NavbarText,
 } from 'reactstrap';
+import HeaderItem from './HeaderItem';
 
 function Header({headerRef, ...args}) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,22 +23,11 @@ function Header({headerRef, ...args}) {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
-            <NavItem>
-              {!user && <Link style={{padding: '0.2rem', textDecoration: 'none'}} to="/login">
-                <NavLink tag='span'>Login</NavLink>
-              </Link>}
-            </NavItem>
-            {user &&
-            <NavItem>
-              <Link style={{padding: '0.2rem', textDecoration: 'none'}} to="/taskboard">
-                <NavLink tag='span'>
-                  Taskboard
-                </NavLink>
-              </Link>
-            </NavItem>
-            }
+            {user === null 
+              ? <HeaderItem to="/login" label="Login" />
+              : <HeaderItem to="/taskboard" label="Taskboard" />}
           </Nav>
-          <NavbarText>{user ? `Welcome, ${user}` : 'Login'}</NavbarText>
+          {user && <NavbarText>Welcome, {user}</NavbarText>}
         </Collapse>
       </Navbar>
     </header>
