@@ -26,16 +26,14 @@ function Header({headerRef, ...args}) {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
             <NavItem>
-              <Link to="/login">
+              {!user && <Link style={{padding: '0.2rem', textDecoration: 'none'}} to="/login">
                 <div>Login</div>
-              </Link>
+              </Link>}
             </NavItem>
             {user &&
             <NavItem>
-              <Link to="/taskboard">
-                <div>
+              <Link style={{padding: '0.2rem', textDecoration: 'none'}} to="/taskboard">
                   Taskboard
-                </div>
               </Link>
             </NavItem>
             }

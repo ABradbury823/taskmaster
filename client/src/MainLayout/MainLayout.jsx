@@ -8,12 +8,11 @@ import { AuthContext } from '../Context';
 function MainLayout() {
   const [headerOffset, setHeaderOffset] = useState('0px');
   const [user, setUser] = useState(null);
-  console.log(user)
 
   const headerRef = useRef(null);
   useEffect(_ => {
     setHeaderOffset(headerRef.current.clientHeight);
-  }, []);
+  }, [user]);
 
   return (
     <>

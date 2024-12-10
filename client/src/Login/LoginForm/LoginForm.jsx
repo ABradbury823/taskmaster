@@ -27,12 +27,13 @@ export default function LoginForm() {
           })
         }).then(res => res.json())
         .then(resData => {
-          console.log(resData)
+          // console.log(resData)
           if (resData.session_id) {
             // TODO: store session id in cookies
+            document.cookie = `session=${resData.session_id}`
             setUser(data.get('username'))
           } else {
-            console.log(resData.message)
+            alert(resData.message)
           }
         })
         .catch(err => console.error(err))
