@@ -38,7 +38,10 @@ export default function LoginForm() {
             alert(resData.message)
           }
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          alert('Something went wrong...')
+          console.error(err)
+        })
       }} className='m-4'>
         <FormGroup floating>
           <Input
