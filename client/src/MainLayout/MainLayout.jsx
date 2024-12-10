@@ -1,13 +1,14 @@
 // TODO: Consider using state and react-router-dom useLocation to show active tab
 import { useState, useEffect, useRef } from 'react';
 import Header from '../Header/Header';
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import { AuthContext } from '../Context';
 
 function MainLayout() {
   // use MainLayout to keep track of signed in user,
   // will provide context to rest of applicatoin
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
   
   // Enable dynamic resize of main based on fixed position nav
   const headerRef = useRef(null);
@@ -24,9 +25,15 @@ function MainLayout() {
     return _ => window.removeEventListener('resize', handleResize);
   }, [user]);
 
+  function logout() {
+    // TODO: end session in db
+    setUser(null);
+    navigate('/login')
+  }
+
   return (
     <AuthContext.Provider value={user}>
-      <Header headerRef={headerRef} expand='lg' color='light' />
+      <Header logout={logout} headerRef={headerRef} expand='lg' color='light' />
       <main style={{ marginTop: headerOffset }}>
         <Outlet context={{ user, setUser }} />
       </main>

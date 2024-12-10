@@ -7,10 +7,12 @@ import {
   NavbarBrand,
   Nav,
   NavbarText,
+  NavItem,
+  Button,
 } from 'reactstrap';
 import HeaderItem from './HeaderItem';
 
-function Header({headerRef, ...args}) {
+function Header({logout, headerRef, ...args}) {
   const [isOpen, setIsOpen] = useState(false);
   const user = useContext(AuthContext);
 
@@ -25,7 +27,11 @@ function Header({headerRef, ...args}) {
           <Nav className="me-auto" navbar>
             {user === null 
               ? <HeaderItem to="/login" label="Login" />
-              : <HeaderItem to="/taskboard" label="Taskboard" />}
+              : (<>
+                  <HeaderItem to="/taskboard" label="Taskboard" />
+                  <NavItem><Button onClick={logout}>Logout</Button></NavItem>
+                 </>
+                )}
           </Nav>
           {user && <NavbarText>Welcome, {user}</NavbarText>}
         </Collapse>
