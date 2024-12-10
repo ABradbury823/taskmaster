@@ -18,10 +18,10 @@ function MainLayout() {
     <>
       <AuthContext.Provider value={user}>
         <Header headerRef={headerRef} expand='lg' color='light' />
+        <main style={{ marginTop: headerOffset }}>
+          <Outlet context={{ user, setUser }} />
+        </main>
       </AuthContext.Provider>
-      <main style={{ marginTop: headerOffset }}>
-        <Outlet context={{ user, setUser }} />
-      </main>
     </>
   );
 }

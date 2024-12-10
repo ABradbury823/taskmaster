@@ -27,13 +27,15 @@ function Header({headerRef, ...args}) {
           <Nav className="me-auto" navbar>
             <NavItem>
               {!user && <Link style={{padding: '0.2rem', textDecoration: 'none'}} to="/login">
-                <div>Login</div>
+                <NavLink tag='span'>Login</NavLink>
               </Link>}
             </NavItem>
             {user &&
             <NavItem>
               <Link style={{padding: '0.2rem', textDecoration: 'none'}} to="/taskboard">
-                  Taskboard
+                  <NavLink tag='span'>
+                    Taskboard
+                  </NavLink>
               </Link>
             </NavItem>
             }

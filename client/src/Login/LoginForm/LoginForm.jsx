@@ -2,11 +2,12 @@ import { Button, Card, CardHeader, Form, FormGroup, FormText, Input, Label } fro
 import "./LoginForm.css"
 import NewUserForm from "../NewUserForm/NewUserForm";
 import { useState } from "react";
-import { useOutletContext } from 'react-router';
+import { useNavigate, useOutletContext } from 'react-router';
 
 export default function LoginForm() {
   const [newUserModal, setNewUserModal] = useState(false);
   const { setUser } = useOutletContext();
+  const navigate = useNavigate();
 
   function toggleNewUserModal() {
     setNewUserModal(!newUserModal);
@@ -32,6 +33,7 @@ export default function LoginForm() {
             // TODO: store session id in cookies
             document.cookie = `session=${resData.session_id}`
             setUser(data.get('username'))
+            navigate('/taskboard')
           } else {
             alert(resData.message)
           }
