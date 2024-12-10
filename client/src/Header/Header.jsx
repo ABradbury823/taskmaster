@@ -33,9 +33,9 @@ function Header({headerRef, ...args}) {
             {user &&
             <NavItem>
               <Link style={{padding: '0.2rem', textDecoration: 'none'}} to="/taskboard">
-                  <NavLink tag='span'>
-                    Taskboard
-                  </NavLink>
+                <NavLink tag='span'>
+                  Taskboard
+                </NavLink>
               </Link>
             </NavItem>
             }
