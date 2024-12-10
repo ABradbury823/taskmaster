@@ -24,7 +24,7 @@ export default function Taskboard() {
       .finally(() => setLoading(false));
 
     return () => controller.abort();
-  }, []);
+  }, [user, navigate]);
 
   return (
     <Container fluid>
