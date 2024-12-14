@@ -7,7 +7,6 @@ import {
   NavbarBrand,
   Nav,
   NavbarText,
-  NavItem,
   Button,
 } from 'reactstrap';
 import HeaderItem from './HeaderItem';
@@ -27,13 +26,10 @@ function Header({logout, headerRef, ...args}) {
           <Nav className="me-auto" navbar>
             {user === null 
               ? <HeaderItem to="/login" label="Login" />
-              : (<>
-                  <HeaderItem to="/taskboard" label="Taskboard" />
-                  <NavItem><Button onClick={logout}>Logout</Button></NavItem>
-                 </>
-                )}
+              : <HeaderItem to="/taskboard" label="Taskboard" />
+            }
           </Nav>
-          {user && <NavbarText>Welcome, {user}</NavbarText>}
+          {user && <NavbarText tag='div'><span>Welcome, {user}</span> <Button size="sm" onClick={logout}>Logout</Button></NavbarText>}
         </Collapse>
       </Navbar>
     </header>

@@ -1,14 +1,13 @@
 // TODO: Consider using state and react-router-dom useLocation to show active tab
 import { useState, useEffect, useRef } from 'react';
 import Header from '../Header/Header';
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet } from 'react-router';
 import { AuthContext } from '../Context';
 
 function MainLayout() {
   // use MainLayout to keep track of signed in user,
   // will provide context to rest of applicatoin
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
   
   // Enable dynamic resize of main based on fixed position nav
   const headerRef = useRef(null);
@@ -16,6 +15,12 @@ function MainLayout() {
   function handleResize() {
     setHeaderOffset(headerRef.current.clientHeight);
   }
+
+  // on mount, set user to session
+  useEffect(_ => {
+    const cookies = document.cookie.split(';').map(cookieString => cookieString.split('='));
+    setUser(cookies.filter(c => c[0] === 'session').length ? sessionStorage.getItem('username') : null);
+  }, [])
 
   // add function to listen to resize event
   useEffect(_ => {
@@ -27,8 +32,10 @@ function MainLayout() {
 
   function logout() {
     // TODO: end session in db
-    setUser(null);
-    navigate('/login')
+    document.cookie = 'session=none;max-age=0';
+    sessionStorage.setItem('session', null);
+    // navigate('/login');
+    window.location.reload();
   }
 
   return (
