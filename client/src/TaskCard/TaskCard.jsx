@@ -5,6 +5,7 @@ function deleteTask(id, stateUpdater) {
   const controller = new AbortController();
   
   fetch(`http://localhost:4500/tasks/${id}`, {
+    signal: controller.signal,
     method: 'DELETE',
   })
   .then(res => {
