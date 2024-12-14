@@ -17,6 +17,13 @@ function MainLayout() {
     setHeaderOffset(headerRef.current.clientHeight);
   }
 
+  // on mount, set user to session
+  useEffect(_ => {
+    const cookies = document.cookie.split(';').map(cookieString => cookieString.split('='));
+    console.log(cookies);
+    setUser(cookies.filter(c => c[0] === 'session').length ? sessionStorage.getItem('username') : null);
+  }, [])
+
   // add function to listen to resize event
   useEffect(_ => {
     window.addEventListener('resize', handleResize);
