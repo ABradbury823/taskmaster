@@ -12,7 +12,7 @@ def task_tuple_to_object(task: tuple):
     "assignee_id": task[2],
     "name": task[3],
     "description": task[4],
-    "due_date": task[5] if task[5] is None else task[5].strftime("%d/%m/%Y,%H:%M:%S"),
+    "due_date": task[5] if task[5] is None else task[5].strftime("%Y-%m-%dT%H:%M:%S"),
   }
 
 class Tasks(Resource):
