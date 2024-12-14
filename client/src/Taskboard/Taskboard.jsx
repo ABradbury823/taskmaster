@@ -10,6 +10,10 @@ export default function Taskboard() {
   const user = useContext(AuthContext);
   const navigate = useNavigate();
 
+  function removeTask(deletedId) {
+    setTasks(tasks.filter(task => task.id !== deletedId))
+  }
+
   useEffect(() => {
     if (user === null) {
       navigate('/login');
@@ -29,7 +33,7 @@ export default function Taskboard() {
   return (
     <Container fluid>
       <Row className="gx-0">
-        {loading ? 'loading' : tasks.map(task => <TaskCard key={task.id} task={task} />)}
+        {loading ? 'loading' : tasks.map(task => <TaskCard key={task.id} task={task} removeTask={removeTask} />)}
       </Row>
     </Container>
   );
