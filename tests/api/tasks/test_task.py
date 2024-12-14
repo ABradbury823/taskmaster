@@ -20,7 +20,7 @@ class TestTask(unittest.TestCase):
       'assignee_id': task[2],
       'name': task[3],
       'description': task[4],
-      'due_date': task[5].strftime("%d/%m/%Y,%H:%M:%S"),
+      'due_date': task[5].strftime("%Y-%m-%dT%H:%M:%S"),
 
     }
     result = test_get(self, base_url + endpoint + '/{}'.format(id))
@@ -42,7 +42,7 @@ class TestTask(unittest.TestCase):
       'assignee_id': updated[2],
       'name': updated[3],
       'description': updated[4],
-      'due_date': updated[5].strftime("%d/%m/%Y,%H:%M:%S"),
+      'due_date': updated[5].strftime("%Y-%m-%dT%H:%M:%S"),
     }
     res = test_put(self, base_url + endpoint + '/{}'.format(id), json=updated_obj)
     self.assertEqual(updated_obj, res)
@@ -59,7 +59,7 @@ class TestTask(unittest.TestCase):
       'assignee_id': updated[2],
       'name': updated[3],
       'description': updated[4],
-      'due_date': updated[5].strftime("%d/%m/%Y,%H:%M:%S"),
+      'due_date': updated[5].strftime("%Y-%m-%dT%H:%M:%S"),
     }
     test_put(self, base_url + endpoint + '/{}'.format(id), json=updated_obj)
     db_task = exec_get_one("SELECT * FROM test.tasks WHERE id=%s;", [id])
@@ -69,7 +69,7 @@ class TestTask(unittest.TestCase):
     """Delete requests return deleted task"""
     id = 1
     deleted = list(exec_get_one("SELECT * FROM test.tasks WHERE id=%s;", [id]))
-    deleted[5] =  deleted[5].strftime("%d/%m/%Y,%H:%M:%S") # due date
+    deleted[5] =  deleted[5].strftime("%Y-%m-%dT%H:%M:%S") # due date
     res = test_delete(self, base_url + endpoint + '?id={}'.format(id))
     self.assertEqual(deleted, list(res.values()))
 
