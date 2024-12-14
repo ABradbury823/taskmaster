@@ -20,7 +20,6 @@ function MainLayout() {
   // on mount, set user to session
   useEffect(_ => {
     const cookies = document.cookie.split(';').map(cookieString => cookieString.split('='));
-    console.log(cookies);
     setUser(cookies.filter(c => c[0] === 'session').length ? sessionStorage.getItem('username') : null);
   }, [])
 
@@ -34,8 +33,10 @@ function MainLayout() {
 
   function logout() {
     // TODO: end session in db
-    setUser(null);
-    navigate('/login')
+    document.cookie = 'session=none;max-age=0';
+    sessionStorage.setItem('session', null);
+    // navigate('/login');
+    window.location.reload();
   }
 
   return (
