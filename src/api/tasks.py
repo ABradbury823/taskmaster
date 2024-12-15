@@ -12,7 +12,7 @@ def task_tuple_to_object(task: tuple):
     "assignee_id": task[2],
     "name": task[3],
     "description": task[4],
-    "due_date": task[5] if task[5] is None else task[5].strftime("%Y-%m-%dT%H:%M:%S"),
+    "due_date": task[5] if task[5] is None else task[5].strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
   }
 
 class Tasks(Resource):
@@ -40,10 +40,11 @@ class Tasks(Resource):
     task_parser.add_argument(
       'due_date', type=lambda x: datetime.strptime(
         x,
-        "%Y-%m-%dT%H:%M:%S.%f%z"
+        "%Y-%m-%dT%H:%M:%S.%fZ"
       ), 
       help='When the required item is due'
     )
+    print('comes in')
     args = task_parser.parse_args(strict=True)
     new_task = create_task(args.get('taskboard_id'), args)
     return task_tuple_to_object(new_task)
