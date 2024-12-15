@@ -10,7 +10,7 @@ export default function Taskboard() {
   const [loading, setLoading] = useState(false);
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [showEditTaskModal, setShowEditTaskModal] = useState(false);
-  const [edittedTask, setEdittedTask] = useState(sessionStorage.getItem('task'));
+  const [edittedTask, setEdittedTask] = useState(null);
   const user = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -20,7 +20,6 @@ export default function Taskboard() {
 
   function postTask(task) {
     const stringifiedTask = JSON.stringify({ ...task, due_date: new Date(task.due_date).toISOString() });
-    console.log(stringifiedTask)
     fetch('http://localhost:4500/tasks', {
       method: 'POST',
       headers: {
@@ -30,15 +29,20 @@ export default function Taskboard() {
     })
     .then(res => {
       if (res.ok) return res.json();
-      console.error(res.text());
       throw new Error('Failed to create task');
     })
     .then(newTask => setTasks(tasks.concat(newTask)))
     .catch(err => console.error(err))
   }
 
+  function editHandler(e, task) {
+    e.preventDefault();
+    setEdittedTask(task);
+    setShowEditTaskModal(true);
+  }
+
   function updateTask(task) {
-    fetch(`http://localhost:4500/task/${task.id}`, {
+    fetch(`http://localhost:4500/tasks/${task.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -84,7 +88,7 @@ export default function Taskboard() {
       {edittedTask !== null && <TaskModal
           toggle={_ => setShowEditTaskModal(false)}
           isOpen={showEditTaskModal}
-          clubInfo={edittedTask}
+          taskInfo={edittedTask}
           update={updateTask}
           refresh={refresh}
         />
@@ -97,7 +101,16 @@ export default function Taskboard() {
         />
       <Container fluid>
         <Row className="gx-0">
-          {loading ? 'loading' : tasks.map(task => <TaskCard key={task.id} task={task} removeTask={removeTask} />)}
+          {loading 
+            ? 'loading' 
+            : tasks.map(task => (
+              <TaskCard 
+                key={task.id} 
+                task={task} 
+                removeTask={removeTask} 
+                editTask={e => editHandler(e, task)}
+              />
+            ))}
         </Row>
       </Container>
     </>

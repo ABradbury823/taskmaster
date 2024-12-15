@@ -6,7 +6,7 @@ class Task {
     this.name = '';
     this.description = '';
     this.due_date = new Date();
-    this.assignee_id = -1;
+    this.assignee_id = null;
     this.taskboard_id = taskboard_id;
   }
 }
@@ -39,7 +39,7 @@ export default function TaskModal({ toggle, isOpen, taskInfo, update, refresh })
           <FormGroup key={'labelClub'+i}>
             <Label>{parseSnake(k)}</Label>
             <Input type={k === 'due_date' ? 'datetime-local' : 'text'} name={'task' + parseSnake(k)}
-            value={task[k]}
+            value={task[k] ?? ''}
             // TODO: need more data validation but forgoing for time
             onChange={e => {
               const updatedTask = {...task, [k]: e.target.value}
