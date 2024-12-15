@@ -32,7 +32,7 @@ function MainLayout() {
 
   function logout() {
     const cookies = document.cookie.split(';').map(cookieString => cookieString.split('='));
-    const userId = sessionStorage.getItem("user-id");
+    const userId = sessionStorage.getItem("user_id");
 
     // future idea: should this use session id as the endpoint instead of user id?
     fetch(`http://localhost:4500/logout/${userId}`, {
@@ -45,10 +45,13 @@ function MainLayout() {
     .then(res => res.json())
     .then(resData => {
       document.cookie = 'session=none;max-age=0';
-      sessionStorage.setItem('session', null);
+      sessionStorage.setItem('username', null);
+      sessionStorage.setItem('user_id', null);
+      sessionStorage.setItem('expires_at', null);
       // navigate('/login');
       window.location.reload();
     })
+    .catch(err => console.log(err))
   }
 
   return (

@@ -1,4 +1,5 @@
 from flask_restful import Resource, request, reqparse
+from datetime import datetime
 
 from db.sessions.get_session import get_session,validate_user_creds
 from db.sessions.create_session import create_session
@@ -24,19 +25,21 @@ class Login(Resource):
 
     username = args['username']
     password = args['password']
-    if('expires_at' in args and args['expires_at'] is not None): expires_at = args['expires_at']
+    if('expires_at' in args and args['expires_at'] is not None): 
+      expires_at = datetime.strptime(args['expires_at'], '%Y-%m-%dT%H:%M:%S.%f%z')
     else: expires_at = 'infinity'
+    print(expires_at)
 
     return log_in(username, password, expires_at)
   
-def log_in(username: str, password: str, expires_at: str):
+def log_in(username: str, password: str, expires_at: datetime):
   """
   Processes a user log-in request.
 
   Parameters:
     username (str) - The inputted username.
     password (str) - The inputted password.
-    expires_at (str) - When the session id expires.
+    expires_at (datetime | str) - When the session id expires.
 
   Returns:
     login_results (dict) - A dictionary with information on whether the login attempt was successful.
@@ -55,7 +58,7 @@ def log_in(username: str, password: str, expires_at: str):
     login_results['message'] = 'Log-in successful. A session id has been made.'
     login_results['user_id'] = user_id
     login_results['session_id'] = session_id
-    login_results['expires_at'] = expires_at
+    login_results['expires_at'] = expires_at.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
   return login_results
 
