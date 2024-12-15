@@ -16,21 +16,27 @@ class Login(Resource):
       'password', type=str, location='json', required=True,
       help='Password is a required field'
     )
+    parser.add_argument(
+     'expires_at', type=str, location='json', required=False,
+     help='The time when the session expires, in ISO format. Default = never expires' 
+    )
     args = parser.parse_args(strict=True)
 
-    #TODO: send arg for expiration time and set on session creation
     username = args['username']
     password = args['password']
+    if('expires_at' in args and args['expires_at'] is not None): expires_at = args['expires_at']
+    else: expires_at = 'infinity'
 
-    return log_in(username, password)
+    return log_in(username, password, expires_at)
   
-def log_in(username: str, password: str):
+def log_in(username: str, password: str, expires_at: str):
   """
   Processes a user log-in request.
 
   Parameters:
     username (str) - The inputted username.
     password (str) - The inputted password.
+    expires_at (str) - When the session id expires.
 
   Returns:
     login_results (dict) - A dictionary with information on whether the login attempt was successful.
@@ -45,10 +51,11 @@ def log_in(username: str, password: str):
     login_results['message'] = 'Invalid credentials. Access denied.'
   # generate session key and set it on user
   else:
-    session_id = create_session(user_id)
+    session_id = create_session(user_id, expires_at)
     login_results['message'] = 'Log-in successful. A session id has been made.'
     login_results['user_id'] = user_id
     login_results['session_id'] = session_id
+    login_results['expires_at'] = expires_at
 
   return login_results
 

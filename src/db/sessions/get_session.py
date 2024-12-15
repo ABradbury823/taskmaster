@@ -7,12 +7,11 @@ def get_session(session_id: str, check_time: str = 'now'):
 
   Parameters:
     session_id (str) - The user's session id.
-    user_id (int) - The user's id.
     session_id (str) - The time the session is checked. Defaults to current time.
 
   Returns:
     user_id (int) - The id of the user. 
-    Returns None if either id is invalid.
+    Returns None if the session id is invalid or expired.
   """
 
   query = """
