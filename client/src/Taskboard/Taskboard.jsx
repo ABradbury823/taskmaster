@@ -19,13 +19,13 @@ export default function Taskboard() {
   }
 
   function postTask(task) {
-    const stringifiedTask = JSON.stringify({ ...task, due_date: new Date(task.due_date).toISOString() });
+    if (task.due_date === ':00.000Z') task.due_date = null;
     fetch('http://localhost:4500/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: stringifiedTask
+      body: JSON.stringify(task)
     })
     .then(res => {
       if (res.ok) return res.json();
@@ -42,6 +42,7 @@ export default function Taskboard() {
   }
 
   function updateTask(task) {
+    if (task.due_date === ':00.000Z') task.due_date = null;
     fetch(`http://localhost:4500/tasks/${task.id}`, {
       method: 'PUT',
       headers: {

@@ -38,7 +38,7 @@ export default function TaskModal({ toggle, isOpen, taskInfo, update, refresh })
           const inputType = k === 'due_date' ? 'datetime-local' : 'text';
           let value = task[k] ?? '';
           if (k === 'due_date') {
-            value = (task[k] ?? new Date().toISOString()).slice(0, -8);
+            value = task[k]?.slice(0, -8) ?? '';
           }
           return (
           <FormGroup key={'labelTask'+i}>
