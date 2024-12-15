@@ -44,7 +44,6 @@ function MainLayout() {
     })
     .then(res => res.json())
     .then(resData => {
-      console.log(resData);
       document.cookie = 'session=none;max-age=0';
       sessionStorage.setItem('session', null);
       // navigate('/login');
