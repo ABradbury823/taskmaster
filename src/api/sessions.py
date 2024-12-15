@@ -4,8 +4,6 @@ from db.sessions.get_session import get_session,validate_user_creds
 from db.sessions.create_session import create_session
 from db.sessions.delete_session import delete_session
 
-# TODO: make session api tests
-
 class Login(Resource):
   def post(self):
     # define parser and request args
@@ -20,6 +18,7 @@ class Login(Resource):
     )
     args = parser.parse_args(strict=True)
 
+    #TODO: send arg for expiration time and set on session creation
     username = args['username']
     password = args['password']
 
@@ -48,6 +47,7 @@ def log_in(username: str, password: str):
   else:
     session_id = create_session(user_id)
     login_results['message'] = 'Log-in successful. A session id has been made.'
+    login_results['user_id'] = user_id
     login_results['session_id'] = session_id
 
   return login_results

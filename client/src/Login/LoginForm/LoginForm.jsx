@@ -32,6 +32,7 @@ export default function LoginForm() {
             // TODO: change max age to more than 10 seconds
             document.cookie = `session=${resData.session_id};max-age=10`
             sessionStorage.setItem('username', data.get('username'))
+            sessionStorage.setItem('user-id', resData.user_id)
             setUser(data.get('username'))
             navigate('/taskboard')
           } else {
