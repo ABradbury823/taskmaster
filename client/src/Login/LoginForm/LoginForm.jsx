@@ -33,11 +33,10 @@ export default function LoginForm() {
         }).then(res => res.json())
         .then(resData => {
           if (resData.session_id) {
-            console.log(resData)
             document.cookie = `session=${resData.session_id};max-age=300`
             sessionStorage.setItem('username', data.get('username'))
             sessionStorage.setItem('user_id', resData.user_id)
-            sessionStorage.setItem('expires_at', resData.expires_at)
+            sessionStorage.setItem('expires_at', new Date(Date.parse(resData.expires_at)))
             setUser(data.get('username'))
             navigate('/taskboard')
           } else {

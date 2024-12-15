@@ -58,7 +58,7 @@ def log_in(username: str, password: str, expires_at: datetime):
     login_results['message'] = 'Log-in successful. A session id has been made.'
     login_results['user_id'] = user_id
     login_results['session_id'] = session_id
-    login_results['expires_at'] = expires_at.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
+    login_results['expires_at'] = expires_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
   return login_results
 
