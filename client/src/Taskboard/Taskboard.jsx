@@ -74,7 +74,7 @@ export default function Taskboard() {
     }
 
     const controller = new AbortController();
-    fetch('http://localhost:4500/tasks', { signal: controller.signal })
+    fetch('http://localhost:4500/tasks?taskboard_id=1', { signal: controller.signal })
       .then(res => res.json())
       .then(data => setTasks(data))
       .catch(err => console.error(err))
