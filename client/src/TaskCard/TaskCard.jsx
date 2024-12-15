@@ -25,7 +25,7 @@ function deleteTask(id, stateUpdater) {
   return () => controller.abort();
 }
 
-export default function TaskCard ({ task, removeTask, editTask }) {
+export default function TaskCard ({ task, removeTask, editHandler }) {
   const { id, name, description, due_date, assignee_id } = task;
   const [user, setUser] = useState(null);
   const [fetchingUser, setFetchingUser] = useState(false);
@@ -67,7 +67,7 @@ export default function TaskCard ({ task, removeTask, editTask }) {
           </div>
         </CardBody>
         <CardFooter>
-          <Button onClick={e => editTask(e, task)}>Edit</Button>
+          <Button onClick={editHandler}>Edit</Button>
           <Button onClick={_ => deleteTask(id, removeTask)}>Delete</Button>
         </CardFooter>
       </Card>

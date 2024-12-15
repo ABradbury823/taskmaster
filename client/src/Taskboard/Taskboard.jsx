@@ -37,17 +37,19 @@ export default function Taskboard() {
 
   function editHandler(e, task) {
     e.preventDefault();
+    console.log('handler', task)
     setEdittedTask(task);
     setShowEditTaskModal(true);
   }
 
   function updateTask(task) {
+    const stringifiedTask = JSON.stringify({ ...task, due_date: new Date(task.due_date).toISOString() });
     fetch(`http://localhost:4500/tasks/${task.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(task)
+      body: stringifiedTask
     })
     .then(res => {
       if (res.ok) return res.json();
@@ -86,7 +88,7 @@ export default function Taskboard() {
     <>
       <Button tag={'button'} onClick={_ => setShowNewTaskModal(true)}>Add New Task</Button>
       {edittedTask !== null && <TaskModal
-          toggle={_ => setShowEditTaskModal(false)}
+          toggle={refresh}
           isOpen={showEditTaskModal}
           taskInfo={edittedTask}
           update={updateTask}
@@ -108,7 +110,7 @@ export default function Taskboard() {
                 key={task.id} 
                 task={task} 
                 removeTask={removeTask} 
-                editTask={e => editHandler(e, task)}
+                editHandler={e => editHandler(e, task)}
               />
             ))}
         </Row>

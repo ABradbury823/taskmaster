@@ -44,7 +44,6 @@ class Tasks(Resource):
       ), 
       help='When the required item is due'
     )
-    print('comes in')
     args = task_parser.parse_args(strict=True)
     new_task = create_task(args.get('taskboard_id'), args)
     return task_tuple_to_object(new_task)
