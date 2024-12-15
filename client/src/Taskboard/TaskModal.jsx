@@ -35,16 +35,23 @@ export default function TaskModal({ toggle, isOpen, taskInfo, update, refresh })
       <ModalBody>
         <Form>
         {Object.keys(task).filter(k => k !== 'id').map((k, i) => {
-          if (taskInfo && k==='due_date') console.log(k, task[k].slice(0, -4))
+          const inputType = k === 'due_date' ? 'datetime-local' : 'text';
+          let value = task[k] ?? '';
+          if (k === 'due_date') {
+            value = task[k]?.slice(0, -1) ?? new Date().toISOString()
+            console.log(value)
+          }
           return (
-          <FormGroup key={'labelClub'+i}>
+          <FormGroup key={'labelTask'+i}>
             <Label>{parseSnake(k)}</Label>
-            <Input type={k === 'due_date' ? 'datetime-local' : 'text'} name={'task' + parseSnake(k)}
-            value={task[k] === null ? '' :  k === 'due_date' ? task[k].slice(0, -4) : task[k] }
+            <Input type={inputType} name={'task' + parseSnake(k)}
+            value={value}
             // TODO: need more data validation but forgoing for time
             onChange={e => {
-              if (taskInfo) console.log('updated', e.target.value)
-              const updatedTask = {...task, [k]: e.target.value}
+              let updatedValue = e.target.value;
+              // add missing seconds, milliseconds, 'Z' to isostring
+              if (k === 'due_date') updatedValue += ':00.000Z';
+              const updatedTask = {...task, [k]: updatedValue}
               setTask(updatedTask);
             }} 
             placeholder={Task['default'+capitalize(k)]} />

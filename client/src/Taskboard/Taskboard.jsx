@@ -37,19 +37,18 @@ export default function Taskboard() {
 
   function editHandler(e, task) {
     e.preventDefault();
-    console.log('handler', task)
+    console.log(task.due_date)
     setEdittedTask(task);
     setShowEditTaskModal(true);
   }
 
   function updateTask(task) {
-    const stringifiedTask = JSON.stringify({ ...task, due_date: new Date(task.due_date).toISOString() });
     fetch(`http://localhost:4500/tasks/${task.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: stringifiedTask
+      body: JSON.stringify(task)
     })
     .then(res => {
       if (res.ok) return res.json();
