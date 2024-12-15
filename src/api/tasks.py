@@ -40,7 +40,7 @@ class Tasks(Resource):
     task_parser.add_argument(
       'due_date', type=lambda x: datetime.strptime(
         x,
-        "%Y-%m-%dT%H:%M:%S"
+        "%Y-%m-%dT%H:%M:%S.%f%z"
       ), 
       help='When the required item is due'
     )

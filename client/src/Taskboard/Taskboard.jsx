@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import { Container, Row } from "reactstrap";
+import { Button, Container, Row } from "reactstrap";
+import TaskModal from './TaskModal';
 import TaskCard from "../TaskCard/TaskCard";
 import { AuthContext } from '../Context';
 import { useNavigate } from 'react-router';
@@ -7,11 +8,58 @@ import { useNavigate } from 'react-router';
 export default function Taskboard() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showNewTaskModal, setShowNewTaskModal] = useState(false);
+  const [showEditTaskModal, setShowEditTaskModal] = useState(false);
+  const [edittedTask, setEdittedTask] = useState(sessionStorage.getItem('task'));
   const user = useContext(AuthContext);
   const navigate = useNavigate();
 
   function removeTask(deletedId) {
     setTasks(tasks.filter(task => task.id !== deletedId))
+  }
+
+  function postTask(task) {
+    const stringifiedTask = JSON.stringify({ ...task, due_date: new Date(task.due_date).toISOString() });
+    console.log(stringifiedTask)
+    fetch('http://localhost:4500/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: stringifiedTask
+    })
+    .then(res => {
+      if (res.ok) return res.json();
+      console.error(res.text());
+      throw new Error('Failed to create task');
+    })
+    .then(newTask => setTasks(tasks.concat(newTask)))
+    .catch(err => console.error(err))
+  }
+
+  function updateTask(task) {
+    fetch(`http://localhost:4500/task/${task.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(task)
+    })
+    .then(res => {
+      if (res.ok) return res.json();
+      throw new Error('Failed to update task');
+    })
+    .then(updatedTask => {
+      setTasks(tasks.map(t => t.id === updatedTask.id
+          ? updatedTask
+          : t));
+    })
+    .catch(err => console.error(err))
+  }
+
+  function refresh() {
+    setEdittedTask(null);
+    setShowEditTaskModal(false);
   }
 
   useEffect(() => {
@@ -31,10 +79,27 @@ export default function Taskboard() {
   }, [user, navigate]);
 
   return (
-    <Container fluid>
-      <Row className="gx-0">
-        {loading ? 'loading' : tasks.map(task => <TaskCard key={task.id} task={task} removeTask={removeTask} />)}
-      </Row>
-    </Container>
+    <>
+      <Button tag={'button'} onClick={_ => setShowNewTaskModal(true)}>Add New Task</Button>
+      {edittedTask !== null && <TaskModal
+          toggle={_ => setShowEditTaskModal(false)}
+          isOpen={showEditTaskModal}
+          clubInfo={edittedTask}
+          update={updateTask}
+          refresh={refresh}
+        />
+        }
+        <TaskModal
+          toggle={_ => setShowNewTaskModal(false)}
+          isOpen={showNewTaskModal}
+          update={postTask}
+          refresh={_ => setShowNewTaskModal(false)}
+        />
+      <Container fluid>
+        <Row className="gx-0">
+          {loading ? 'loading' : tasks.map(task => <TaskCard key={task.id} task={task} removeTask={removeTask} />)}
+        </Row>
+      </Container>
+    </>
   );
 }
