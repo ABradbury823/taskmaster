@@ -16,7 +16,7 @@ export default function TaskCard ({ task }) {
       .then(data => setUser(data))
       .catch(err => {
         console.error(err);
-        setUser({ display_name: 'Uknown user' })
+        setUser({ display_name: 'Unknown user' })
       })
       .finally(() => setFetchingUser(false));
 

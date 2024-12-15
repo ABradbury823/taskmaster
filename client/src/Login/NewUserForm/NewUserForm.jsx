@@ -80,7 +80,7 @@ export default function NewUserForm({open, onSubmit, onToggle}) {
   }
 
   // TODO: validate data
-  function handleSubmit() {
+  function handleSubmit(e) {
 
     if(username.value === "" || email.value === "" ||
       password.value === "" || confirmPassword === ""
@@ -99,7 +99,7 @@ export default function NewUserForm({open, onSubmit, onToggle}) {
     // TODO: check that username and email are available
 
 
-    onSubmit();
+    onSubmit(e);
     
     resetValues();
   }
@@ -198,7 +198,7 @@ export default function NewUserForm({open, onSubmit, onToggle}) {
         <FormText color="danger" hidden={!invalidSubmit}>{submitMessage}</FormText>
         <Button 
           type="submit" 
-          onClick={handleSubmit}
+          onClick={e => handleSubmit(e)}
         >
           Submit
         </Button>

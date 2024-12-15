@@ -2,9 +2,12 @@ import { Button, Card, CardHeader, Form, FormGroup, FormText, Input, Label } fro
 import "./LoginForm.css"
 import NewUserForm from "../NewUserForm/NewUserForm";
 import { useState } from "react";
+import { useNavigate, useOutletContext } from 'react-router';
 
 export default function LoginForm() {
   const [newUserModal, setNewUserModal] = useState(false);
+  const { setUser } = useOutletContext();
+  const navigate = useNavigate();
 
   function toggleNewUserModal() {
     setNewUserModal(!newUserModal);
@@ -13,7 +16,33 @@ export default function LoginForm() {
   return (
     <Card>
       <CardHeader tag="h2">TaskMaster Login</CardHeader>
-      <Form className='m-4'>
+      <Form onSubmit={(e) => {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        fetch('http://localhost:4500/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: data.get('username'),
+            password: data.get('password')
+          })
+        }).then(res => res.json())
+        .then(resData => {
+          if (resData.session_id) {
+            // TODO: change max age to more than 10 seconds
+            document.cookie = `session=${resData.session_id};max-age=10`
+            sessionStorage.setItem('username', data.get('username'))
+            setUser(data.get('username'))
+            navigate('/taskboard')
+          } else {
+            alert(resData.message)
+          }
+        })
+        .catch(err => {
+          alert('Something went wrong...')
+          console.error(err)
+        })
+      }} className='m-4'>
         <FormGroup floating>
           <Input
             id="username"
@@ -54,7 +83,32 @@ export default function LoginForm() {
           </FormText>
           <NewUserForm
             open={newUserModal}
-            onSubmit={() => {console.log("Create new user"); toggleNewUserModal();}}
+            onSubmit={(e) => {
+              console.log("Create new user"); 
+              e.preventDefault();
+              const data = new FormData(e.target.parentElement.parentElement.children[1].children[0]);
+              const body = {
+                name: data.get('new-username'),
+                password: data.get('new-password'),
+                email: data.get('new-email'),
+                display_name: data.get('new-display_name'),
+                bio: data.get('new-bio'),
+              };
+              fetch('http://localhost:4500/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+              }).then(res => res.json())
+              .then(resData => {
+                if (resData?.name === body.name) {
+                  alert('Success')
+                } else {
+                  alert('Failed')
+                }
+              })
+              .catch(err => console.error(err))
+              toggleNewUserModal();
+            }}
             onToggle={toggleNewUserModal}
           />
         </FormGroup>
