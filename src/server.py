@@ -12,6 +12,8 @@ from api.taskboard import Taskboard
 from api.categories import Categories
 from api.teams import Teams
 
+from db.data import create_test_data_client
+
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
@@ -29,4 +31,5 @@ api.add_resource(Categories, '/categories')
 api.add_resource(Teams, '/teams')
 
 if __name__ == '__main__':
+  create_test_data_client()
   app.run(host='::', port=4500, debug=True)
