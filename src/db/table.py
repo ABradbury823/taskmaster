@@ -50,7 +50,6 @@ class Table():
         else 'WHERE ' + ' AND '.join(filtered_where)
        };
     """
-    print(query, where)
     res = self._database.select(query, values, number)
     if res is None: return None
     return (
