@@ -37,7 +37,6 @@ export default function Taskboard() {
 
   function editHandler(e, task) {
     e.preventDefault();
-    console.log(task.due_date)
     setEdittedTask(task);
     setShowEditTaskModal(true);
   }
