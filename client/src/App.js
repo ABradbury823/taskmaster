@@ -1,10 +1,22 @@
-import logo from './logo.svg';
+import { Col, Container, Row } from "reactstrap";
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
+    <Container className="App">
+      <Row>
+        <Col className="app-col col-1">
+          <header className="App-header">
+            <h1>Welcome to TaskMaster</h1>
+            <h3>A comprehensive task management application designed to help 
+              users organize, track, and complete their tasks efficiently.</h3>
+          </header>
+        </Col>
+        <Col className="app-col col-2">
+          Column 2
+        </Col>
+      </Row>
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -17,8 +29,8 @@ function App() {
         >
           Learn React
         </a>
-      </header>
-    </div>
+      </header> */}
+    </Container>
   );
 }
 

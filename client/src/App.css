@@ -1,8 +1,45 @@
 .App {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
+  color: white;
+  background: linear-gradient(to bottom, #00A6CF, #004E64);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 100vw;
+  min-height: 100vh;
+  padding: 0;
 }
 
-.App-logo {
+.app-col {
+  width: 100%;
+  padding: 1rem;
+}
+
+@keyframes fade-in {
+  from {color: #FFFFFF00; left: -200px;}
+  to {color: white; left: 0px;}
+}
+
+.col-1 {
+  position: relative;
+  animation: fade-in;
+  animation-timing-function:ease-out;
+  animation-duration: 1s;
+  margin-bottom: 1rem;
+}
+
+.col-1 h1 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.col-2 {
+  background-color: #004E64;
+}
+
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -35,4 +72,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */

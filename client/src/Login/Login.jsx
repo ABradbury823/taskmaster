@@ -17,7 +17,7 @@ export default function Login() {
     }, [user, navigate]);
 
   return (
-    <Container>
+    <Container className="Login">
       <Row>
         <Col xs="1" sm="2" md="3" xxl="4"></Col>
         <Col xs="10" sm="8" md="6" xxl="4">
