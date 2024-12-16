@@ -57,7 +57,7 @@ def log_in(username: str, password: str, expires_at: datetime):
     login_results['message'] = 'Log-in successful. A session id has been made.'
     login_results['user_id'] = user_id
     login_results['session_id'] = session[0]
-    login_results['expires_at'] = datetime.strftime(session[1], '%Y-%m-%dT%H:%M:%S.%fZ')
+    login_results['expires_at'] = datetime.strftime(expires_at, '%Y-%m-%dT%H:%M:%S.%fZ')
 
   return login_results
 
@@ -73,7 +73,7 @@ class Logout(Resource):
       logout_result = get_session(session_id)
     except SessionExpiredError:
       delete_session(session_id)
-      return {'message': 'The session has expired. The user has been logged out.'}, 200
+      return {'message': 'Session expired. The user has been logged out.'}, 401
 
     if(logout_result is None or user_id != logout_result[0]):
       return {'message': 'Invalid credentials. Access denied.'}, 401

@@ -35,6 +35,7 @@ export default function LoginForm() {
             document.cookie = `session=${resData.session_id};`
             sessionStorage.setItem('username', data.get('username'))
             sessionStorage.setItem('user_id', resData.user_id)
+            sessionStorage.setItem('session_expires_at', new Date(resData.expires_at));
             setUser(data.get('username'))
             navigate('/taskboard')
           } else {
