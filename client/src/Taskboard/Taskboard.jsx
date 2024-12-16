@@ -6,6 +6,9 @@ import { AuthContext } from '../Context';
 import { useNavigate } from 'react-router';
 
 export default function Taskboard({ taskboard }) {
+  // A component that renders information about a provided task board
+  // Includes name and tasks associated with board
+  // Renders TaskCards and Modals
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
@@ -16,10 +19,13 @@ export default function Taskboard({ taskboard }) {
   // let { taskboardId } = useParams();
 
   function removeTask(deletedId) {
+    // Remove the task from the front end
     setTasks(tasks.filter(task => task.id !== deletedId))
   }
 
   function postTask(task) {
+    // Send the updated task state to the data base
+    // Add the newly created task to the front end upon successful response
     if (task.due_date === ':00.000Z') task.due_date = null;
     fetch('http://localhost:4500/tasks', {
       method: 'POST',
@@ -37,12 +43,16 @@ export default function Taskboard({ taskboard }) {
   }
 
   function editHandler(e, task) {
+    // Edit initialization with provide task
+    // Task supplied in TaskCard component
     e.preventDefault();
     setEdittedTask(task);
     setShowEditTaskModal(true);
   }
 
   function updateTask(task) {
+    // Send the updated task state to the data base
+    // Update the task on the front end upon successful response
     if (task.due_date === ':00.000Z') task.due_date = null;
     fetch(`http://localhost:4500/tasks/${task.id}`, {
       method: 'PUT',
@@ -64,6 +74,7 @@ export default function Taskboard({ taskboard }) {
   }
 
   function refresh() {
+    // Close and remove state from the edit task modal
     setEdittedTask(null);
     setShowEditTaskModal(false);
   }

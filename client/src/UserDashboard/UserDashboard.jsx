@@ -4,6 +4,8 @@ import Taskboard from "../Taskboard/Taskboard";
 import { useNavigate } from "react-router";
 
 export default function UserDashboard() {
+  // A component that renders information about the logged in user
+  // Renders Task boards
   const user = useContext(AuthContext);
   const [taskboards, setTaskboards] = useState([]);
   const navigate = useNavigate();
