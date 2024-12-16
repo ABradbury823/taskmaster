@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Header from '../Header/Header';
 import { Outlet } from 'react-router';
 import { AuthContext } from '../Context';
+import './MainLayout.css'
 
 function MainLayout() {
   // use MainLayout to keep track of signed in user,
@@ -78,6 +79,15 @@ function MainLayout() {
       <main style={{ marginTop: headerOffset }}>
         <Outlet context={{ user, setUser }} />
       </main>
+      <footer>
+        <p>
+          &copy;2024 Team Ashbury - 
+          This site was completed for SWEN-610: Foundations of Software Engineering. 
+        </p>
+        <p>
+        Powered by PostgreSQL, Flask, and React. 
+        </p>
+      </footer>
     </AuthContext.Provider>
   );
 }
