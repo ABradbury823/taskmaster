@@ -7,7 +7,7 @@ from src.db.sessions.delete_session import *
 class TestDeleteSession(unittest.TestCase):
   def setUp(self):
     create_test_data()
-    self.session_id = create_session(1)
+    self.session_id = create_session(1)[0]
 
   def test_delete_session(self):
     """Deleting a session removes it from the database"""

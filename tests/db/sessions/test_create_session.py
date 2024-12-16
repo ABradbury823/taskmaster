@@ -12,5 +12,5 @@ class TestCreateSession(unittest.TestCase):
     user_id = 1
     result = create_session(user_id)
     id = exec_get_one('SELECT id FROM test.sessions WHERE user_id = %s;', (user_id,))[0]
-    self.assertEqual(id, result, "Unexpected session id for new session.")
+    self.assertEqual(id, result[0], "Unexpected session id for new session.")
     

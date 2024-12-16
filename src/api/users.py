@@ -4,7 +4,7 @@ from db.users.get_user import get_all_users, get_user
 from db.users.create_user import create_user
 from db.users.update_user import update_user
 from db.users.delete_user import delete_user
-from db.sessions.get_session import get_session
+from db.sessions.get_session import SessionExpiredError, get_session
 
 # TODO: remove password from GET request
 def user_tuple_to_object(user: tuple):
@@ -31,7 +31,6 @@ def user_tuple_to_object(user: tuple):
   }
 
 class Users(Resource):
-  # TODO: remove once other endpoints are working (no need for outside users to access all users)
   def get(self):
     users = get_all_users()
 
@@ -89,9 +88,12 @@ class User(Resource):
     if not session_id:
       return {'message': 'Session ID required.'}, 400
     
-    logout_result = get_session(session_id)
-
-    if(logout_result is None or user_id != logout_result):
+    try:
+      logout_result = get_session(session_id)
+    except SessionExpiredError as e:
+      return {'message': 'The session has expired. Please re-enter your credentials.'}, e.args[1]
+      
+    if(logout_result is None or user_id != logout_result[0]):
       return {'message': 'Invalid credentials. Access denied.'}, 401
 
     user_parser = reqparse.RequestParser(bundle_errors=True)
@@ -126,9 +128,12 @@ class User(Resource):
     if not session_id:
       return {'message': 'Session ID required.'}, 400
     
-    logout_result = get_session(session_id)
+    try:
+      logout_result = get_session(session_id)
+    except SessionExpiredError as e:
+      return {'message': 'The session has expired. Please re-enter your credentials.'}, e.args[1]
 
-    if(logout_result is None or user_id != logout_result):
+    if(logout_result is None or user_id != logout_result[0]):
       return {'message': 'Invalid credentials. Access denied.'}, 401
 
     deleted_user = delete_user(user_id)

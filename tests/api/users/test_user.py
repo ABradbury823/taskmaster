@@ -11,7 +11,7 @@ class TestUser(unittest.TestCase):
     exec_sql_file('src/db/create_test_data.sql')
     self.user_info = ['newuser', 'newuser@email.com', 'newuserpassword']
     self.u_id = create_user(self.user_info[0], self.user_info[1], self.user_info[2])[0]
-    self.session_id = create_session(self.u_id)
+    self.session_id = create_session(self.u_id)[0]
     self.header = {'session-id': self.session_id}
     self.url = 'http://localhost:4500/users/' + str(self.u_id)
 
@@ -78,6 +78,6 @@ class TestUser(unittest.TestCase):
     result = test_get(self, self.url)
     self.assertEqual(len(result), 1, "Found unexpected data for a deleted user.")
 
-  def test_delete_noid_returns_400(self):
+  def test_delete_no_id_returns_400(self):
     """Delete requests with no session id are a bad request"""
     test_delete(self, self.url, expected_status=400)

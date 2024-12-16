@@ -1,10 +1,9 @@
 from flask_restful import Resource, request, reqparse
+from datetime import datetime
 
-from db.sessions.get_session import get_session,validate_user_creds
+from db.sessions.get_session import SessionExpiredError, get_session,validate_user_creds
 from db.sessions.create_session import create_session
 from db.sessions.delete_session import delete_session
-
-# TODO: make session api tests
 
 class Login(Resource):
   def post(self):
@@ -18,20 +17,28 @@ class Login(Resource):
       'password', type=str, location='json', required=True,
       help='Password is a required field'
     )
+    parser.add_argument(
+     'expires_at', type=str, location='json', required=False,
+     help='The time when the session expires, in ISO format. Default = never expires' 
+    )
     args = parser.parse_args(strict=True)
 
     username = args['username']
     password = args['password']
+    if('expires_at' in args and args['expires_at'] is not None): 
+      expires_at = datetime.strptime(args['expires_at'], '%Y-%m-%dT%H:%M:%S.%f%z')
+    else: expires_at = 'infinity'
 
-    return log_in(username, password)
+    return log_in(username, password, expires_at)
   
-def log_in(username: str, password: str):
+def log_in(username: str, password: str, expires_at: datetime):
   """
   Processes a user log-in request.
 
   Parameters:
     username (str) - The inputted username.
     password (str) - The inputted password.
+    expires_at (datetime | str) - When the session id expires.
 
   Returns:
     login_results (dict) - A dictionary with information on whether the login attempt was successful.
@@ -46,9 +53,12 @@ def log_in(username: str, password: str):
     login_results['message'] = 'Invalid credentials. Access denied.'
   # generate session key and set it on user
   else:
-    session_id = create_session(user_id)
+    session = create_session(user_id, expires_at)
     login_results['message'] = 'Log-in successful. A session id has been made.'
-    login_results['session_id'] = session_id
+    login_results['user_id'] = user_id
+    login_results['session_id'] = session[0]
+    time_obj = session[1] if expires_at == 'infinity' else expires_at
+    login_results['expires_at'] = datetime.strftime(time_obj, '%Y-%m-%dT%H:%M:%S.%fZ')
 
   return login_results
 
@@ -60,14 +70,18 @@ class Logout(Resource):
     if not session_id:
       return {'message': 'Session ID required.'}, 400
     
-    logout_result = get_session(session_id)
+    try:
+      logout_result = get_session(session_id)
+    except SessionExpiredError:
+      delete_session(session_id)
+      return {'message': 'Session expired. The user has been logged out.'}, 401
 
-    if(logout_result is None or user_id != logout_result):
+    if(logout_result is None or user_id != logout_result[0]):
       return {'message': 'Invalid credentials. Access denied.'}, 401
 
-    return logout(session_id, user_id)
+    return logout(session_id)
 
-def logout(session_id: str, user_id: int):
+def logout(session_id: str):
   """Attempt to log out a user, give result as dictionary."""
   
   delete_session(session_id)

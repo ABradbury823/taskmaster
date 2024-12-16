@@ -21,9 +21,17 @@ function MainLayout() {
     const cookies = document.cookie.split(';').map(cookieString => cookieString.split('='));
     if (cookies.filter(c => c[0] === 'session').length === 0) {
       sessionStorage.removeItem('username');
+      sessionStorage.removeItem('user_id');
+      sessionStorage.removeItem('session_expires_at');
       setUser(null);
     } else {
-      setUser(sessionStorage.getItem('username'));
+      // log out user if their session has expired
+      const expire_time = new Date(sessionStorage.getItem('session_expires_at'))
+      if(expire_time.getTime() < Date.now()) {
+        logout(false);
+      } else {
+        setUser(sessionStorage.getItem('username'));
+      }
     }
   }, []);
 
@@ -35,12 +43,33 @@ function MainLayout() {
     return _ => window.removeEventListener('resize', handleResize);
   }, [user]);
 
-  function logout() {
-    // TODO: end session in db
-    document.cookie = 'session=none;max-age=0';
-    sessionStorage.setItem('session', null);
-    // navigate('/login');
-    window.location.reload();
+  function logout(viaButton = true) {
+    const cookies = document.cookie.split(';').map(cookieString => cookieString.split('='));
+    const userId = sessionStorage.getItem("user_id");
+
+    fetch(`http://localhost:4500/logout/${userId}`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'session-id': cookies[0][1]
+      }
+    })
+    .then(res => {
+      if(res.ok || res.status === 401) return res.json();
+    })
+    .then(resData => {
+      if(sessionStorage.getItem('username')) {
+        if(!viaButton && resData.message.includes("Session expired")) {
+          alert('Your session has expired. Please re-enter your log-in credentials');
+        }
+        document.cookie = 'session=none;max-age=0';
+        sessionStorage.setItem('username', null);
+        sessionStorage.setItem('user_id', null);
+        sessionStorage.setItem('session_expires_at', null)
+        window.location.reload();
+      }
+    })
+    .catch(err => console.log(err))
   }
 
   return (

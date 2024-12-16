@@ -19,19 +19,23 @@ export default function LoginForm() {
       <Form onSubmit={(e) => {
         e.preventDefault();
         const data = new FormData(e.target);
+        const expireDate = new Date();
+        expireDate.setSeconds(expireDate.getSeconds() + 300);
         fetch('http://localhost:4500/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             username: data.get('username'),
-            password: data.get('password')
+            password: data.get('password'),
+            expires_at: expireDate.toISOString()
           })
         }).then(res => res.json())
         .then(resData => {
           if (resData.session_id) {
-            // TODO: change max age to more than 10 seconds
-            document.cookie = `session=${resData.session_id};max-age=300`
+            document.cookie = `session=${resData.session_id};`
             sessionStorage.setItem('username', data.get('username'))
+            sessionStorage.setItem('user_id', resData.user_id)
+            sessionStorage.setItem('session_expires_at', new Date(resData.expires_at));
             setUser(data.get('username'))
             navigate('/taskboard')
           } else {

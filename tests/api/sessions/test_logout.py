@@ -12,7 +12,7 @@ class TestLogout(unittest.TestCase):
     create_test_data()
     self.user_creds = ['newuser', 'newuser@email.com', 'newuserpassword']
     self.u_id = create_user(self.user_creds[0], self.user_creds[1], self.user_creds[2])[0]
-    self.session_id = create_session(self.u_id)
+    self.session_id = create_session(self.u_id)[0]
     self.endpoint = '/logout/' + str(self.u_id)
 
   def test_get_returns_405_error(self):
