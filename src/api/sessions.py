@@ -1,7 +1,7 @@
 from flask_restful import Resource, request, reqparse
 from datetime import datetime
 
-from db.sessions.get_session import get_session,validate_user_creds
+from db.sessions.get_session import SessionExpiredError, get_session,validate_user_creds
 from db.sessions.create_session import create_session
 from db.sessions.delete_session import delete_session
 
@@ -28,7 +28,6 @@ class Login(Resource):
     if('expires_at' in args and args['expires_at'] is not None): 
       expires_at = datetime.strptime(args['expires_at'], '%Y-%m-%dT%H:%M:%S.%f%z')
     else: expires_at = 'infinity'
-    print(expires_at)
 
     return log_in(username, password, expires_at)
   
@@ -54,11 +53,11 @@ def log_in(username: str, password: str, expires_at: datetime):
     login_results['message'] = 'Invalid credentials. Access denied.'
   # generate session key and set it on user
   else:
-    session_id = create_session(user_id, expires_at)
+    session = create_session(user_id, expires_at)
     login_results['message'] = 'Log-in successful. A session id has been made.'
     login_results['user_id'] = user_id
-    login_results['session_id'] = session_id
-    login_results['expires_at'] = expires_at.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    login_results['session_id'] = session[0]
+    login_results['expires_at'] = datetime.strftime(session[1], '%Y-%m-%dT%H:%M:%S.%fZ')
 
   return login_results
 
@@ -70,14 +69,18 @@ class Logout(Resource):
     if not session_id:
       return {'message': 'Session ID required.'}, 400
     
-    logout_result = get_session(session_id)
+    try:
+      logout_result = get_session(session_id)
+    except SessionExpiredError:
+      delete_session(session_id)
+      return {'message': 'The session has expired. The user has been logged out.'}, 200
 
-    if(logout_result is None or user_id != logout_result):
+    if(logout_result is None or user_id != logout_result[0]):
       return {'message': 'Invalid credentials. Access denied.'}, 401
 
-    return logout(session_id, user_id)
+    return logout(session_id)
 
-def logout(session_id: str, user_id: int):
+def logout(session_id: str):
   """Attempt to log out a user, give result as dictionary."""
   
   delete_session(session_id)

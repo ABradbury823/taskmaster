@@ -20,8 +20,7 @@ export default function LoginForm() {
         e.preventDefault();
         const data = new FormData(e.target);
         const expireDate = new Date();
-        expireDate.setSeconds(expireDate.getSeconds() + 300);
-        console.log(expireDate.toISOString())
+        expireDate.setSeconds(expireDate.getSeconds() + 10);  // TODO: increase session length
         fetch('http://localhost:4500/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -33,10 +32,9 @@ export default function LoginForm() {
         }).then(res => res.json())
         .then(resData => {
           if (resData.session_id) {
-            document.cookie = `session=${resData.session_id};max-age=300`
+            document.cookie = `session=${resData.session_id};`
             sessionStorage.setItem('username', data.get('username'))
             sessionStorage.setItem('user_id', resData.user_id)
-            sessionStorage.setItem('expires_at', new Date(Date.parse(resData.expires_at)))
             setUser(data.get('username'))
             navigate('/taskboard')
           } else {

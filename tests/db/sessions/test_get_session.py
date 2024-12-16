@@ -11,12 +11,12 @@ class TestGetSession(unittest.TestCase):
   def setUp(self):
     create_test_data()
     self.user_id = 1
-    self.session_id = create_session(self.user_id)
+    self.session_id = create_session(self.user_id)[0]
 
   def test_get_session_logged_in(self):
     """Get session returns logged in user's id"""
     result = get_session(self.session_id)
-    self.assertEqual(result, self.user_id, 'Unexpected user id for session.')
+    self.assertEqual(result[0], self.user_id, 'Unexpected user id for session.')
 
   def test_get_session_logged_out(self):
     """Get session returns None if the user is not logged in"""
@@ -25,10 +25,13 @@ class TestGetSession(unittest.TestCase):
     self.assertIsNone(result, 'Expected None when retrieving a deleted session.')
     
   def test_get_session_expired(self):
-    """Get session returns None if session has expired"""
-    new_session_id = create_session(2, 'tomorrow')
-    result = get_session(new_session_id, '2100/01/01')
-    self.assertIsNone(result, 'Expected None when retrieving an expired session.')
+    """Get session raises a SessionExpiredError if session has expired"""
+    new_session_id = create_session(2, 'tomorrow')[0]
+    try: 
+      with self.assertRaises(SessionExpiredError):
+        get_session(new_session_id, '2100/01/01')
+    except AssertionError:
+      self.fail("Expected a SessionExpiredError to be raised when getting an expired session.")
 
   def test_valid_user_creds_id(self):
     """Return user_id if user credentials match"""

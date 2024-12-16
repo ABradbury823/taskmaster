@@ -1,5 +1,24 @@
 from ..swen610_db_utils import *
 from .session_utils import hash_string
+from datetime import datetime
+
+class SessionExpiredError(Exception):
+  """
+  Exception raised when a session has expired.
+  
+  Attributes:
+    message (str) - explanation of the error
+    error_code (int) - the error's status code
+  """
+
+  def __init__(self, message, error_code = 403):
+    self.message = message
+    self.error_code = error_code
+    super().__init__(message, error_code)
+
+  def __str__(self):
+    return f'{self.message} (Error Code: {self.error_code})'
+  
 
 def get_session(session_id: str, check_time: str = 'now'):
   """
@@ -7,26 +26,38 @@ def get_session(session_id: str, check_time: str = 'now'):
 
   Parameters:
     session_id (str) - The user's session id.
-    session_id (str) - The time the session is checked. Defaults to current time.
+    check_time (str) - The time the session is checked. Defaults to current time.
 
   Returns:
-    user_id (int) - The id of the user. 
-    Returns None if the session id is invalid or expired.
+    session_info (tuple) - Information on the session in the format (user_id, expires_at)
+      user_id (int) - The id of the user. 
+      expires_at (datetime) - The timestamp when the session expires.
+    Returns None if the session id is invalid.
+  
+  Raises:
+    SessionExpiredError - The provided session id has expired.
   """
 
   query = """
-  SELECT user_id FROM test.sessions 
-  WHERE id = %s AND (expires_at = 'infinity' OR expires_at > %s);
+  SELECT user_id, expires_at FROM test.sessions 
+  WHERE id LIKE %s;
   """
 
-  params = (session_id, check_time,)
+  params = (session_id,)
 
   result = exec_get_one(query, params)
 
   if result is None:
     return None
+  
+  # session has expired
+  expire_at = result[1]
+  # this is purely for tests - a custom 'current time'
+  cur_time = datetime.now() if check_time == 'now' else datetime.strptime(check_time, '%Y/%m/%d')
+  if expire_at < cur_time:
+    raise SessionExpiredError(f'The session for this user has expired.')
 
-  return result[0]
+  return result
 
 def validate_user_creds(username: str, password: str):
   """
