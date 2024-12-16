@@ -2,6 +2,7 @@ import {useState} from "react";
 import { Button, Form, FormFeedback, FormGroup, FormText, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 export default function NewUserForm({open, onSubmit, onToggle}) {
+  // Form with field validation for new user creation
   // maybe this could be simplified down to one state object for the whole form?
   const [username, setUsername] = useState({value: "", invalid: false, feedback: ""});
   const [email, setEmail] = useState({value: "", invalid: false, feedback: ""});

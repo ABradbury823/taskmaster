@@ -12,6 +12,7 @@ import {
 import HeaderItem from './HeaderItem';
 
 function Header({logout, headerRef, ...args}) {
+  // Header to render navigation and user information
   const [isOpen, setIsOpen] = useState(false);
   const user = useContext(AuthContext);
 

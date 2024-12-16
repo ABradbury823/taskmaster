@@ -11,6 +11,9 @@ class Table():
     self._database = database
 
   def parse_obj(self, entity: tuple):
+    """
+      Parse database entity tuple into a JSON serializable object
+    """
     obj = {}
     for col in self._columns:
       obj[col['column_name']] = entity[(col['ordinal_position'] - 1)]
@@ -21,12 +24,18 @@ class Table():
     return obj
   
   def parse_array_of_ojbs(self, entities: list):
+    """
+      Parse a list of database entity tuples
+    """
     arr = []
     for entity in entities:
       arr.append(self.parse_obj(entity))
     return arr
 
   def select(self, fields:list=[], where:dict={}, number:int=None):
+    """
+      Select entities from the current table and return them as JSON objects.
+    """
     filtered_fields = []
     filtered_where = []
     values = []
@@ -58,6 +67,9 @@ class Table():
     )
   
   def insert(self, fields:dict={}, returning:list=''):
+    """
+      Insert an object by converting into an entity tuple.
+    """
     filtered_fields = []
     value_holder = []
     filtered_returning = []
