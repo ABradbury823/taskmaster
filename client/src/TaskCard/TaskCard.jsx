@@ -1,8 +1,32 @@
 import { useState, useEffect } from "react";
-import { Card, CardTitle, CardBody, Row, Col } from "reactstrap";
+import { Card, CardTitle, CardBody, Col, CardFooter, Button } from "reactstrap";
 
-export default function TaskCard ({ task }) {
-  const { name, description, due_date, assignee_id } = task;
+function deleteTask(id, stateUpdater) {
+  const controller = new AbortController();
+  
+  fetch(`http://localhost:4500/tasks/${id}`, {
+    signal: controller.signal,
+    method: 'DELETE',
+  })
+  .then(res => {
+    if (res.ok) return res.json();
+    throw new Error('Server failure');
+  })
+  .then(data => {
+    // TODO: Should anything be done with deleted item, cache for undo?
+    // if nothing, move function contents to res.ok conditional
+    stateUpdater(id);
+  })
+  .catch(err => {
+    alert('Something went wrong');
+    console.error(err);
+  })
+
+  return () => controller.abort();
+}
+
+export default function TaskCard ({ task, removeTask, editHandler }) {
+  const { id, name, description, due_date, assignee_id } = task;
   const [user, setUser] = useState(null);
   const [fetchingUser, setFetchingUser] = useState(false);
 
@@ -25,7 +49,7 @@ export default function TaskCard ({ task }) {
 
   return (
     <Col xs={{ size: 10, offset: 1}} sm={{ size: 3, offset: 0}}>
-      <Card className="m-2" style={{ backgroundColor: '#AFFFED60', backdropFilter: 'blur(10px)' }}>
+      <Card className="m-2" style={{ minWidth: 'fit-content', maxWidth: '2rem', aspectRatio: '4 / 3', backgroundColor: '#AFFFED60', backdropFilter: 'blur(10px)' }}>
         <CardTitle style={{ 
           padding: '0.5rem',
           borderBottom: '0.05rem solid black'
@@ -38,12 +62,14 @@ export default function TaskCard ({ task }) {
             <div style={{ width: 'fit-content', textAlign: "left" }}>{fetchingUser ? '...' : user?.display_name ?? 'Unassigned'}</div>
             <div style={{ width: 'fit-content', textAlign: "right" }}>Due: {due_date ? new Date(due_date).toDateString() : '-'}</div>
           </div>
-          <Row style={{ textAlign: "left"}}>
-            <Col xs="12">
-              {description}
-            </Col>
-          </Row>
+          <div style={{ textAlign: 'left'}}>
+            {description}
+          </div>
         </CardBody>
+        <CardFooter>
+          <Button onClick={editHandler}>Edit</Button>
+          <Button onClick={_ => deleteTask(id, removeTask)}>Delete</Button>
+        </CardFooter>
       </Card>
     </Col>
   );
