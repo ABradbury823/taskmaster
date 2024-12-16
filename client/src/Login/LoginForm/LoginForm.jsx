@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate, useOutletContext } from 'react-router';
 
 export default function LoginForm() {
+  // Form with field validation for new user creation
   const [newUserModal, setNewUserModal] = useState(false);
   const { setUser } = useOutletContext();
   const navigate = useNavigate();

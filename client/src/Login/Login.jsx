@@ -6,6 +6,7 @@ import { AuthContext } from '../Context';
 import { useNavigate } from 'react-router';
 
 export default function Login() {
+  // Layout component for Login form
   const user = useContext(AuthContext);
   const navigate = useNavigate();
 

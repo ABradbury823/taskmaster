@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardTitle, CardBody, Col, CardFooter, Button } from "reactstrap";
 
 function deleteTask(id, stateUpdater) {
+  // Remove a task from the database, the from frontend upon successful response
   const controller = new AbortController();
   
   fetch(`http://localhost:4500/tasks/${id}`, {
@@ -26,7 +27,9 @@ function deleteTask(id, stateUpdater) {
 }
 
 export default function TaskCard ({ task, removeTask, editHandler }) {
+  // A card that renders task information and users can interact with for CRUD functional
   const { id, name, description, due_date, assignee_id } = task;
+  // 'User' here refers to the assignee user, not the user logged in
   const [user, setUser] = useState(null);
   const [fetchingUser, setFetchingUser] = useState(false);
 
