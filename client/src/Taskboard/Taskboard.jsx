@@ -3,9 +3,9 @@ import { Button, Container, Row } from "reactstrap";
 import TaskModal from './TaskModal';
 import TaskCard from "../TaskCard/TaskCard";
 import { AuthContext } from '../Context';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
-export default function Taskboard() {
+export default function Taskboard({ taskboard }) {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
@@ -13,6 +13,7 @@ export default function Taskboard() {
   const [edittedTask, setEdittedTask] = useState(null);
   const user = useContext(AuthContext);
   const navigate = useNavigate();
+  let { taskboardId } = useParams();
 
   function removeTask(deletedId) {
     setTasks(tasks.filter(task => task.id !== deletedId))
@@ -32,7 +33,7 @@ export default function Taskboard() {
       throw new Error('Failed to create task');
     })
     .then(newTask => setTasks(tasks.concat(newTask)))
-    .catch(err => console.error(err))
+    .catch(err => console.error(err));
   }
 
   function editHandler(e, task) {
@@ -74,17 +75,20 @@ export default function Taskboard() {
     }
 
     const controller = new AbortController();
-    fetch('http://localhost:4500/tasks?taskboard_id=1', { signal: controller.signal })
+    fetch(`http://localhost:4500/tasks?taskboard_id=${taskboard.id}`, { signal: controller.signal })
       .then(res => res.json())
       .then(data => setTasks(data))
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
 
     return () => controller.abort();
-  }, [user, navigate]);
+  }, [user, taskboard, navigate]);
 
   return (
-    <>
+    <div>
+      <h2>
+        {taskboard.name}
+      </h2>
       <Button tag={'button'} onClick={_ => setShowNewTaskModal(true)}>Add New Task</Button>
       {edittedTask !== null && <TaskModal
           toggle={refresh}
@@ -104,7 +108,7 @@ export default function Taskboard() {
         <Row className="gx-0">
           {loading 
             ? 'loading' 
-            : tasks.map(task => (
+            : tasks.length && tasks.map(task => (
               <TaskCard 
                 key={task.id} 
                 task={task} 
@@ -114,6 +118,6 @@ export default function Taskboard() {
             ))}
         </Row>
       </Container>
-    </>
+    </div>
   );
 }
