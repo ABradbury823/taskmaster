@@ -14,6 +14,7 @@ export default function LoginForm() {
     setNewUserModal(!newUserModal);
   }
 
+  // Start a new user session given a username and password
   function login(username, password) {
     const expireDate = new Date();
     expireDate.setSeconds(expireDate.getSeconds() + 300);
@@ -48,6 +49,7 @@ export default function LoginForm() {
     <Card>
       <CardHeader tag="h2">TaskMaster Login</CardHeader>
       <Form onSubmit={(e) => {
+        e.preventDefault()
         const data = new FormData(e.target);
         const username = data.get('username');
         const password = data.get('password');
