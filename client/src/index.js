@@ -6,8 +6,9 @@ import App from './App';
 import Login from './Login/Login';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router';
-import Taskboard from './Taskboard/Taskboard';
+// import Taskboard from './Taskboard/Taskboard';
 import MainLayout from './MainLayout/MainLayout';
+import UserDashboard from './UserDashboard/UserDashboard';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,7 +18,8 @@ root.render(
         <Route path='/' element={<MainLayout />}>
           <Route index element={<App />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/taskboard' element={<Taskboard />} />
+          <Route path='/user' element={<UserDashboard />} />
+          {/* <Route path='/taskboard/:taskboardId' element={<Taskboard />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

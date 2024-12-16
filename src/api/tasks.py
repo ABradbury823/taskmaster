@@ -5,6 +5,8 @@ from db.tasks.create_task import create_task
 from db.tasks.get_task import get_all_tasks
 from db.tasks.delete_task import delete_task
 
+from db.db import Database
+
 def task_tuple_to_object(task: tuple):
   return {
     "id": task[0],
@@ -17,7 +19,17 @@ def task_tuple_to_object(task: tuple):
 
 class Tasks(Resource):
   def get(self):
-    return list((task_tuple_to_object(task) for task in get_all_tasks()))
+    # return list((task_tuple_to_object(task) for task in get_all_tasks()))
+    task_filter_parser = reqparse.RequestParser(bundle_errors=True)
+    task_filter_parser.add_argument(
+      'taskboard_id', type=int, location='args'
+    )
+    args = task_filter_parser.parse_args()
+    where={}
+    for key in args:
+      if args[key] is not None: where[key] = args[key]
+    db = Database('test')
+    return db.tables['tasks'].select(where=where)
 
   def post(self):
     task_parser = reqparse.RequestParser(bundle_errors=True)
