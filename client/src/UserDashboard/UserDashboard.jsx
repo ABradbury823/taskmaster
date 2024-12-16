@@ -1,12 +1,15 @@
 import { AuthContext } from "../Context";
 import { useState, useEffect, useContext } from "react";
 import Taskboard from "../Taskboard/Taskboard";
+import { useNavigate } from "react-router";
 
 export default function UserDashboard() {
   const user = useContext(AuthContext);
   const [taskboards, setTaskboards] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(_ => {
+    if (user === null) navigate('/login');
     const controller = new AbortController();
 
     fetch('http://localhost:4500/taskboards')
