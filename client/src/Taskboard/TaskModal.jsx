@@ -24,7 +24,7 @@ export default function TaskModal({ toggle, isOpen, taskInfo, update, refresh })
 
   function submitTask(e) {
     e.preventDefault();
-    if (task.assignee_id === -1) task.assignee_id = null;
+    if (task.assignee_id === -1 || task.assignee_id === '') task.assignee_id = null;
     update(task);
     setTask(new Task());
     refresh();
@@ -34,7 +34,7 @@ export default function TaskModal({ toggle, isOpen, taskInfo, update, refresh })
     <Modal toggle={toggle} isOpen={isOpen}>
       <ModalBody>
         <Form>
-        {Object.keys(task).filter(k => k !== 'id').map((k, i) => {
+        {Object.keys(task).filter(k => k !== 'id' && k !== 'taskboard_id').map((k, i) => {
           const inputType = k === 'due_date' ? 'datetime-local' : 'text';
           let value = task[k] ?? '';
           if (k === 'due_date') {
