@@ -57,7 +57,8 @@ def log_in(username: str, password: str, expires_at: datetime):
     login_results['message'] = 'Log-in successful. A session id has been made.'
     login_results['user_id'] = user_id
     login_results['session_id'] = session[0]
-    login_results['expires_at'] = datetime.strftime(expires_at, '%Y-%m-%dT%H:%M:%S.%fZ')
+    time_obj = session[1] if expires_at == 'infinity' else expires_at
+    login_results['expires_at'] = datetime.strftime(time_obj, '%Y-%m-%dT%H:%M:%S.%fZ')
 
   return login_results
 

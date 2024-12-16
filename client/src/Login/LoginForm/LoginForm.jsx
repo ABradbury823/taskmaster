@@ -20,7 +20,7 @@ export default function LoginForm() {
         e.preventDefault();
         const data = new FormData(e.target);
         const expireDate = new Date();
-        expireDate.setSeconds(expireDate.getSeconds() + 10);  // TODO: increase session length
+        expireDate.setSeconds(expireDate.getSeconds() + 300);
         fetch('http://localhost:4500/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
