@@ -1,8 +1,21 @@
 import { Col, Container, Row } from "reactstrap";
 import LoginForm from "./LoginForm/LoginForm";
 import './Login.css'
+import { useEffect, useContext } from 'react';
+import { AuthContext } from '../Context';
+import { useNavigate } from 'react-router';
 
 export default function Login() {
+  const user = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      if (user !== null) {
+        navigate('/user');
+        return;
+      }
+    }, [user, navigate]);
+
   return (
     <Container>
       <Row>

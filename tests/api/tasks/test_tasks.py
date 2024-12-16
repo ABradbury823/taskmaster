@@ -23,7 +23,7 @@ class TestTasks(unittest.TestCase):
       'assignee_id': 2,
       'name': 'Find a reason',
       'description': 'Why are we here? Just to suffer?',
-      'due_date': datetime.now().strftime("%d/%m/%Y,%H:%M:%S")
+      'due_date': datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+"Z"
     }
     res = test_post(self, base_url + endpoint, json=task, expected_status=200)
     for key in task:
@@ -40,7 +40,7 @@ class TestTasks(unittest.TestCase):
     """Delete requests return deleted item(s)"""
     id = 1
     deleted = list(exec_get_one("SELECT * FROM test.tasks WHERE id=%s;", [id]))
-    deleted[5] =  deleted[5].strftime("%d/%m/%Y,%H:%M:%S") # due date
+    deleted[5] =  deleted[5].strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]+"Z" # due date
     res = test_delete(self, base_url + endpoint + '?id={}'.format(id))
     self.assertEqual(deleted, list(res.values()))
 

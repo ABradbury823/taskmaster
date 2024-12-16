@@ -26,7 +26,8 @@ function Header({logout, headerRef, ...args}) {
           <Nav className="me-auto" navbar>
             {user === null 
               ? <HeaderItem to="/login" label="Login" />
-              : <HeaderItem to="/taskboard" label="Taskboard" />
+              // : <HeaderItem to="/taskboard" label="Taskboard" />
+              : <HeaderItem to="/user" label={`${user}'s Dashboard`} /> 
             }
           </Nav>
           {user && <NavbarText tag='div'><span>Welcome, {user}</span> <Button size="sm" onClick={logout}>Logout</Button></NavbarText>}

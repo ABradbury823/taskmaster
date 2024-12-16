@@ -19,8 +19,13 @@ function MainLayout() {
   // on mount, set user to session
   useEffect(_ => {
     const cookies = document.cookie.split(';').map(cookieString => cookieString.split('='));
-    setUser(cookies.filter(c => c[0] === 'session').length ? sessionStorage.getItem('username') : null);
-  }, [])
+    if (cookies.filter(c => c[0] === 'session').length === 0) {
+      sessionStorage.removeItem('username');
+      setUser(null);
+    } else {
+      setUser(sessionStorage.getItem('username'));
+    }
+  }, []);
 
   // add function to listen to resize event
   useEffect(_ => {
