@@ -3,7 +3,7 @@ import { Button, Container, Row } from "reactstrap";
 import TaskModal from './TaskModal';
 import TaskCard from "../TaskCard/TaskCard";
 import { AuthContext } from '../Context';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 
 export default function Taskboard({ taskboard }) {
   const [tasks, setTasks] = useState([]);
@@ -13,7 +13,7 @@ export default function Taskboard({ taskboard }) {
   const [edittedTask, setEdittedTask] = useState(null);
   const user = useContext(AuthContext);
   const navigate = useNavigate();
-  let { taskboardId } = useParams();
+  // let { taskboardId } = useParams();
 
   function removeTask(deletedId) {
     setTasks(tasks.filter(task => task.id !== deletedId))
