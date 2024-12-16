@@ -14,6 +14,7 @@ function App() {
         </Col>
         <Col className="app-col col-2">
           <Container className="feature-list">
+            <h3>Features</h3>
             <Row>
               <Col className="feature" xs="12" md="6">
                  <img width="33" height="33" src="https://img.icons8.com/android/24/user.png" alt="user"/>
