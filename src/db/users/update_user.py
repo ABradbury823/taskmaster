@@ -1,5 +1,6 @@
 from ..swen610_db_utils import *
 from .get_user import is_user_name_used, is_user_email_used
+from ..sessions.session_utils import hash_string
 
 def _build_update_user_query(user_id: int, args: dict[str, str]):
   """
@@ -18,6 +19,9 @@ def _build_update_user_query(user_id: int, args: dict[str, str]):
   user_cols = [
     'name', 'email', 'password', 'display_name', 'bio'
   ]
+
+  if('password' in args):
+    args['password'] = hash_string(args['password'])
 
   columns = []
   params = []
@@ -137,6 +141,8 @@ def update_user_password(user_id: int, new_password: str):
     user_info (tuple) - The updated user's information in the format
     (id, name, email, password, display_name, bio).
   """
+
+
 
   query, params = _build_update_user_query(user_id, {'password': new_password})
 

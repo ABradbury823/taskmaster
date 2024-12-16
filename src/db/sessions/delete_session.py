@@ -1,11 +1,11 @@
 from ..swen610_db_utils import *
 
-def delete_session(session_id: int):
+def delete_session(session_id):
   """
   Ends a session.
 
   Parameters:
-    session_id (int) - The session id.
+    session_id - The session id.
 
   """
   query = """

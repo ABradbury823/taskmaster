@@ -17,7 +17,7 @@ def update_task(task_id: int, args={}):
     )`
   """
   col_heads = [ 
-    'assigne_id', 'name', 'description', 'due_date' 
+    'assignee_id', 'name', 'description', 'due_date' 
   ]
 
   columns = []

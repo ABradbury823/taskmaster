@@ -44,18 +44,18 @@ class TestUpdateUser(unittest.TestCase):
   def test_update_user_display_name(self):
     """Updates a user with a new display name"""
     user_id = 1
-    result = update_user_password(user_id, 'The Gardener')
+    result = update_user_display_name(user_id, 'The Gardener')
     user = self.get_user(user_id)
     self.assertEqual(result, user, 'Expected user entry and update results to match.')
 
   def test_update_user_bio(self):
     """Updates a user with a new bio"""
     user_id = 1
-    result = update_user_password(user_id, 'On that 7 day grind :muscle:')
+    result = update_user_bio(user_id, 'On that 7 day grind :muscle:')
     user = self.get_user(user_id)
     self.assertEqual(result, user, 'Expected user entry and update results to match.')
 
-  def test_update_user_password(self):
+  def test_update_user_all_fields(self):
     """Updates all of a user's fields at once"""
     user_id = 1
     result = update_user(

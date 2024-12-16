@@ -11,10 +11,13 @@ def create_session(user_id, expires_at = 'infinity'):
     expires_at (str) - When the session id expires. Never expires if date is not provided.
 
   Returns:
-    session_id (str) - A hexidecimal code associated with this session.
+    session_info (tuple) - Info about the session:
+      session_id (str) - A hexidecimal code associated with this session.
+      expires_at (datetime) - When the session expires.
   """
 
   # make a new key
+  # TODO: session key does not (and probably should not) be stored in the db since it isn't used anywhere else
   session_key = generate_sequence_key()
 
   # make a session id by hashing the session key 
@@ -24,11 +27,11 @@ def create_session(user_id, expires_at = 'infinity'):
   query = """
   INSERT INTO test.sessions (id, user_id, session_key, created_at, expires_at)
   VALUES(%s, %s, %s, 'now', %s)
-  RETURNING *;
+  RETURNING id, expires_at;
   """
 
   params = (session_id, user_id, session_key, expires_at)
 
   result = exec_commit_return(query, params)
 
-  return session_id
+  return result

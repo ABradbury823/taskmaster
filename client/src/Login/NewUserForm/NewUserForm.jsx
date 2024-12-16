@@ -2,6 +2,7 @@ import {useState} from "react";
 import { Button, Form, FormFeedback, FormGroup, FormText, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 export default function NewUserForm({open, onSubmit, onToggle}) {
+  // Form with field validation for new user creation
   // maybe this could be simplified down to one state object for the whole form?
   const [username, setUsername] = useState({value: "", invalid: false, feedback: ""});
   const [email, setEmail] = useState({value: "", invalid: false, feedback: ""});
@@ -80,7 +81,7 @@ export default function NewUserForm({open, onSubmit, onToggle}) {
   }
 
   // TODO: validate data
-  function handleSubmit() {
+  function handleSubmit(e) {
 
     if(username.value === "" || email.value === "" ||
       password.value === "" || confirmPassword === ""
@@ -99,7 +100,7 @@ export default function NewUserForm({open, onSubmit, onToggle}) {
     // TODO: check that username and email are available
 
 
-    onSubmit();
+    onSubmit(e);
     
     resetValues();
   }
@@ -198,7 +199,7 @@ export default function NewUserForm({open, onSubmit, onToggle}) {
         <FormText color="danger" hidden={!invalidSubmit}>{submitMessage}</FormText>
         <Button 
           type="submit" 
-          onClick={handleSubmit}
+          onClick={e => handleSubmit(e)}
         >
           Submit
         </Button>

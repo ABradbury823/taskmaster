@@ -7,8 +7,6 @@ from src.db.users.create_user import create_user
 base_url = 'http://localhost:4500'
 endpoint = '/login'
 
-# TODO: validate user creds for viewing, updating, and deleting user
-
 class TestLogin(unittest.TestCase):
   def setUp(self):
     create_test_data()
