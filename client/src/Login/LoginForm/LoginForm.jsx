@@ -14,40 +14,45 @@ export default function LoginForm() {
     setNewUserModal(!newUserModal);
   }
 
+  function login(username, password) {
+    const expireDate = new Date();
+    expireDate.setSeconds(expireDate.getSeconds() + 300);
+    fetch('http://localhost:4500/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        expires_at: expireDate.toISOString()
+      })
+    }).then(res => res.json())
+    .then(resData => {
+      if (resData.session_id) {
+        document.cookie = `session=${resData.session_id};`
+        sessionStorage.setItem('username', username)
+        sessionStorage.setItem('user_id', resData.user_id)
+        sessionStorage.setItem('session_expires_at', new Date(resData.expires_at));
+        setUser(username)
+        navigate('/taskboard')
+      } else {
+        alert(resData.message)
+      }
+    })
+    .catch(err => {
+      alert('Something went wrong...')
+      console.error(err)
+    })
+  }
+
   return (
     <Card>
       <CardHeader tag="h2">TaskMaster Login</CardHeader>
       <Form onSubmit={(e) => {
-        e.preventDefault();
         const data = new FormData(e.target);
-        const expireDate = new Date();
-        expireDate.setSeconds(expireDate.getSeconds() + 300);
-        fetch('http://localhost:4500/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            username: data.get('username'),
-            password: data.get('password'),
-            expires_at: expireDate.toISOString()
-          })
-        }).then(res => res.json())
-        .then(resData => {
-          if (resData.session_id) {
-            document.cookie = `session=${resData.session_id};`
-            sessionStorage.setItem('username', data.get('username'))
-            sessionStorage.setItem('user_id', resData.user_id)
-            sessionStorage.setItem('session_expires_at', new Date(resData.expires_at));
-            setUser(data.get('username'))
-            navigate('/taskboard')
-          } else {
-            alert(resData.message)
-          }
-        })
-        .catch(err => {
-          alert('Something went wrong...')
-          console.error(err)
-        })
-      }} className='m-4'>
+        const username = data.get('username');
+        const password = data.get('password');
+        login(username, password)
+        }} className='m-4'>
         <FormGroup floating>
           <Input
             id="username"
@@ -89,7 +94,6 @@ export default function LoginForm() {
           <NewUserForm
             open={newUserModal}
             onSubmit={(e) => {
-              console.log("Create new user"); 
               e.preventDefault();
               const data = new FormData(e.target.parentElement.parentElement.children[1].children[0]);
               const body = {
@@ -106,7 +110,9 @@ export default function LoginForm() {
               }).then(res => res.json())
               .then(resData => {
                 if (resData?.name === body.name) {
-                  alert('Success')
+                  const username = data.get('new-username');
+                  const password = data.get('new-password');
+                  login(username, password)
                 } else {
                   alert('Failed')
                 }
