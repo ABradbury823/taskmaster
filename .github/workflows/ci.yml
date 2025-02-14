@@ -61,3 +61,9 @@ jobs:
       run: |
         python3 -m coverage run -m unittest -v
         python3 -m coverage report
+        python3 -m coverage xml
+        
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        file: ./coverage.xml
