@@ -64,10 +64,10 @@ jobs:
     - name: Ensure database exists and run schema setup
       run: |
         # Ensure taskmaster database exists
-        psql -h postgres -U swen610 -d taskmaster -c "SELECT 1;" || psql -h postgres -U swen610 -d postgres -c "CREATE DATABASE taskmaster;"
+        psql -h localhost -U swen610 -d taskmaster -c "SELECT 1;" || psql -h localhost -U swen610 -d postgres -c "CREATE DATABASE taskmaster;"
 
         # Run the schema setup (e.g., migrations or SQL setup script)
-        psql -h postgres -U swen610 -d taskmaster -f ./src/db/create_test_data.sql
+        psql -h localhost -U swen610 -d taskmaster -f ./src/db/create_test_data.sql
 
     - name: Start server
       run: python3 src/server.py &  # Running the server in the background
