@@ -9,7 +9,7 @@ on:
       - '*'  # Runs on pull request to any branch
 
 jobs:
-  test:
+  run-tests:
     runs-on: ubuntu-latest
 
     services:
@@ -38,9 +38,8 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9.2'
-        architecture: 'x64'  # Make sure the correct architecture is selected
-        cache: false
+        python-version: '3.9'
+        architecture: 'x64'
 
     - name: Install dependencies
       run: pip install -qr requirements.txt
