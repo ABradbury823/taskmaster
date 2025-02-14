@@ -1,5 +1,7 @@
 # TaskMaster
 
+[![codecov](https://codecov.io/gh/ABradbury823/taskmaster/graph/badge.svg?token=PUSZZCXJRH)](https://codecov.io/gh/ABradbury823/taskmaster)
+
 A task-managing application for small teams to collaborate and
 develop for inception to completion.
 
