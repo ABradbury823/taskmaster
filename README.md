@@ -1,27 +1,24 @@
 # TaskMaster
 
 [![codecov](https://codecov.io/gh/ABradbury823/taskmaster/graph/badge.svg?token=PUSZZCXJRH)](https://codecov.io/gh/ABradbury823/taskmaster)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A task-managing application for small teams to collaborate and
-develop for inception to completion.
+A task-managing application for small teams to collaborate and develop from inception to completion. 
 
 ## Installation
-To install Python dependencies use the command
+Install the Python dependencies on the project's root directory
 ```
 pip install -r requirements.txt
 ```
-Start the application server with the following command
-from the project's root directory
+Start the application server on the project's root directory
 ```
 python src/server.py
 ```
-To install React dependencies use the following command
-from the project's `/client` directory
+Install React dependencies on the `/client` directory
 ```
 npm install
 ```
-Start the React application with the following command
-from the project's `/client` directory
+Start the React application on the `/client` directory
 ```
 npm start
 ```
@@ -38,14 +35,5 @@ http://localhost:3000/login
 http://localhost:3000/user
 ```
 
-## Roadmap
-- ~~Implement remaining REST resources/endpoints~~
-- ~~Build out a client application using React~~
-- ~~Connect client with backend~~
-- Implement update and delete methods in Table class
-- Implement teams and categories APIs on server
-- Build out team parameterized endpoints
-- Add UI for task filters
-
 ## Acknowledgments
-Thank you to Dr. Newman for providing helpful code for DB access.
+Thank you to Dr. Newman for providing helpful code for DB access. This project was made for SWEN-610: Foundations of Software Development.
