@@ -36,15 +36,6 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install -qr requirements.txt
-
-    - name: Debug network connectivity
-      run: |
-        # List Docker networks to see which one the service is using
-        docker network ls
-        
-        # Inspect the network to check which containers are connected
-        docker network inspect bridge  # 'bridge' is the default network Docker uses in most cases
-      
         
     - name: Configure credentials
       run: cp config/gitlab-credentials.yml config/db.yml
