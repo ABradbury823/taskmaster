@@ -41,7 +41,9 @@ jobs:
         python-version: '3.9'
 
     - name: Install dependencies
-      run: pip install -r requirements.txt
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install -r requirements.txt
 
     - name: Check Python version
       run: python3 --version
