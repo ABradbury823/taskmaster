@@ -29,7 +29,7 @@ jobs:
 
     container:
       image: kalrabb/swen344-pg-py-base:latest
-      # options: --entrypoint "/bin/bash"  # Start with bash to allow custom commands (if needed)
+      options: --entrypoint "/bin/bash"  # Start with bash to allow custom commands (if needed)
 
     steps:
     - name: Checkout code
@@ -39,6 +39,8 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.9.2'
+        architecture: 'x64'  # Make sure the correct architecture is selected
+        cache: false
 
     - name: Install dependencies
       run: pip install -qr requirements.txt
