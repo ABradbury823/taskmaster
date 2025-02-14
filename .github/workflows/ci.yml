@@ -12,6 +12,7 @@ jobs:
       postgres:
         image: postgres:14
         env:
+          POSTGRES_HOST: localhost
           POSTGRES_DB: taskmaster
           POSTGRES_USER: swen610
           POSTGRES_PASSWORD: whowatchesthewatchmen
