@@ -36,6 +36,10 @@ jobs:
       run: |
         python3 -m pip install -qr requirements.txt
 
+    - name: Check if PostgreSQL is up and running
+      run: |
+        pg_isready -h postgres -p 5432 -U swen610 -v  # Ensure it can resolve the 'postgres' hostname and connect
+
     - name: Debug DNS resolution
       run: |
         nslookup postgres  # Check if 'postgres' can be resolved
