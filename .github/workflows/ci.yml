@@ -45,7 +45,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python3 -m pip install -q --upgrade pip
+        # python3 -m pip install -q --upgrade pip
         python3 -m pip install -qr requirements.txt
         
     - name: Configure credentials
@@ -56,18 +56,10 @@ jobs:
 
     - name: Wait for PostgreSQL to be ready
       run: |
-        until pg_isready -h localhost -p 5432 -U swen610; do
+        until pg_isready -h postgres -p 5432 -U swen610; do
           echo "Waiting for PostgreSQL to be ready..."
           sleep 3
         done
-
-    - name: Ensure database exists and run schema setup
-      run: |
-        # Ensure taskmaster database exists
-        psql -h localhost -U swen610 -d taskmaster -c "SELECT 1;" || psql -h localhost -U swen610 -d postgres -c "CREATE DATABASE taskmaster;"
-
-        # Run the schema setup (e.g., migrations or SQL setup script)
-        psql -h localhost -U swen610 -d taskmaster -f ./src/db/create_test_data.sql
 
     - name: Start server
       run: python3 src/server.py &  # Running the server in the background
