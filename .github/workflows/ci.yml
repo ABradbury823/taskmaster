@@ -1,0 +1,58 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - '*'  # Runs on push to any branch
+  pull_request:
+    branches:
+      - '*'  # Runs on pull request to any branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: taskmaster
+          POSTGRES_USER: swen610
+          POSTGRES_PASSWORD: whowatchesthewatchmen
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U swen610"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    container:
+      image: kalrabb/swen344-pg-py-base:latest
+      # options: --entrypoint "/bin/bash"  # Start with bash to allow custom commands (if needed)
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9.2'
+
+    - name: Install dependencies
+      run: pip install -qr requirements.txt
+
+    - name: Check Python version
+      run: python3 --version
+
+    - name: Start server
+      run: python3 src/server.py &  # Running the server in the background
+
+    - name: Wait for the server to be ready
+      run: sleep 3
+
+    - name: Run tests
+      run: |
+        python3 -m coverage run -m unittest -v
+        python3 -m coverage report
