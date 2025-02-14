@@ -38,7 +38,7 @@ jobs:
 
     - name: Check if PostgreSQL is up and running
       run: |
-        pg_isready -h postgres -p 5432 -U swen610 -v  # Ensure it can resolve the 'postgres' hostname and connect
+        pg_isready -h postgres -p 5432 -U swen610  # Ensure it can resolve the 'postgres' hostname and connect
 
     - name: Debug DNS resolution
       run: |
