@@ -27,9 +27,9 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-    container:
-      image: kalrabb/swen344-pg-py-base:latest
-      options: --entrypoint "/bin/bash"  # Start with bash to allow custom commands (if needed)
+    # container:
+    #   image: kalrabb/swen344-pg-py-base:latest
+    #   options: --entrypoint "/bin/bash"  # Start with bash to allow custom commands (if needed)
 
     steps:
     - name: Checkout code
@@ -40,7 +40,7 @@ jobs:
 
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9'
 
