@@ -37,15 +37,6 @@ jobs:
       run: |
         python3 -m pip install -qr requirements.txt
 
-    - name: Check if PostgreSQL is up and running
-      run: |
-        pg_isready -h postgres -p 5432 -U swen610  # Ensure it can resolve the 'postgres' hostname and connect
-
-    - name: Debug DNS resolution
-      run: |
-        nslookup postgres  # Check if 'postgres' can be resolved
-        ping postgres  # Try to ping the 'postgres' container to check connectivity
-
     - name: Debug network connectivity
       run: |
         # List Docker networks to see which one the service is using
