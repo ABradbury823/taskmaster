@@ -35,8 +35,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Git
-      run: apt-get update && apt-get install -y git
+    - name: Install Git and Curl
+      run: apt-get update && apt-get install -y git curl
+
 
     - name: Set up Python
       uses: actions/setup-python@v4
