@@ -27,16 +27,9 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-    # container:
-    #   image: kalrabb/swen344-pg-py-base:latest
-    #   options: --entrypoint "/bin/bash"  # Start with bash to allow custom commands (if needed)
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    # - name: Install Git and Curl
-    #   run: sudo apt-get update && sudo apt-get install -y git curl
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -45,7 +38,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # python3 -m pip install -q --upgrade pip
         python3 -m pip install -qr requirements.txt
         
     - name: Configure credentials
@@ -53,13 +45,6 @@ jobs:
 
     - name: Check Python version
       run: python3 --version
-
-    - name: Wait for PostgreSQL to be ready
-      run: |
-        until pg_isready -h postgres -p 5432 -U swen610; do
-          echo "Waiting for PostgreSQL to be ready..."
-          sleep 3
-        done
 
     - name: Start server
       run: python3 src/server.py &  # Running the server in the background
