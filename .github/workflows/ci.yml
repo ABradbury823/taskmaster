@@ -54,6 +54,13 @@ jobs:
     - name: Check Python version
       run: python3 --version
 
+    - name: Wait for PostgreSQL to be ready
+      run: |
+        until pg_isready -h localhost -p 5432 -U swen610; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 3
+        done
+
     - name: Start server
       run: python3 src/server.py &  # Running the server in the background
 
